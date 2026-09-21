@@ -109,8 +109,13 @@ git commit -m "Add Vitest for unit tests"
 
 - [ ] **Step 1: Init shadcn/ui**
 
+Use `shadcn@3.8.5`, not `@latest`: the current `shadcn@latest` (4.x) defaults to a new
+"Base UI"-backed `base-nova` style whose `form` registry entry ships with no files yet (silently
+no-ops on `add form`). `3.8.5` is the last release before that rearchitecture — classic `new-york`
+style, full Radix-based component set, `form.tsx` included.
+
 ```bash
-npx shadcn@latest init -d
+npx shadcn@3.8.5 init -d
 ```
 
 - [ ] **Step 2: Install form and toast dependencies explicitly**
@@ -126,7 +131,7 @@ so it must already be installed before Step 3 adds that component — even thoug
 - [ ] **Step 3: Add the components this phase needs**
 
 ```bash
-npx shadcn@latest add button input label form sheet dropdown-menu sonner
+npx shadcn@3.8.5 add button input label form sheet dropdown-menu sonner --yes
 ```
 
 - [ ] **Step 4: Verify**

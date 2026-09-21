@@ -20,7 +20,10 @@ Guardrails from the spec (do not violate without explicit user request):
 ## Tech stack (locked decisions)
 
 - Next.js 15.x, App Router, TypeScript, `src/` layout
-- Tailwind CSS + shadcn/ui
+- Tailwind CSS + shadcn/ui — use the CLI pinned to `shadcn@3.8.5` for any `init`/`add`, not
+  `@latest`. Newer major versions (4.x) default to a "Base UI"-backed style whose registry has
+  gaps (e.g. `form` has no files yet, silently no-ops). `3.8.5` is the last release with the
+  classic `new-york` style and a complete Radix-based component set.
 - Prisma ORM **v5** (`prisma` and `@prisma/client` pinned to the 5.x line) — deliberately not v6
 - Neon Postgres for both dev and prod (same connection string architecture, no local Postgres)
 - Auth.js v5 (`next-auth@beta`) with `@auth/prisma-adapter`, Credentials provider (email/password
