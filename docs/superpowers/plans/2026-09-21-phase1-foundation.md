@@ -344,13 +344,19 @@ AUTH_URL="http://localhost:3000"
 - [ ] **Step 3: Fill in your real `.env`**
 
 Edit `.env` (created by hand in Task 4, already gitignored) with your actual Neon `DATABASE_URL`
-and `DIRECT_URL` — replacing the `postgresql://placeholder` values — plus:
+and `DIRECT_URL` — replacing the `postgresql://placeholder` values. Neon typically only surfaces
+the pooled connection string (hostname contains `-pooler`); derive `DIRECT_URL` by removing that
+`-pooler` suffix from the hostname — same credentials, same database, direct (non-pooled) endpoint.
+
+For `AUTH_SECRET`, `npx auth secret` can hang waiting on an npx "ok to install?" prompt with no
+TTY to answer it (observed on this Node/npx combination) — generate an equivalent value directly
+instead, since it's just a random secret:
 
 ```bash
-npx auth secret
+SECRET=$(openssl rand -base64 33)
+echo "AUTH_SECRET=\"$SECRET\"" >> .env
+echo 'AUTH_URL="http://localhost:3000"' >> .env
 ```
-
-This generates `AUTH_SECRET` and appends it to `.env` automatically. Add `AUTH_URL="http://localhost:3000"` manually.
 
 - [ ] **Step 4: Commit `.env.example`**
 
