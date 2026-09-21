@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -70,15 +70,18 @@ export function TaskFormSheet({
   const isEdit = !!task;
   const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const emptyValues: TaskInput = {
-    title: "",
-    description: "",
-    notes: "",
-    projectId: defaultProjectId,
-    priority: "MEDIUM",
-    status: "TODO",
-    dueDate: "",
-  };
+  const emptyValues = useMemo<TaskInput>(
+    () => ({
+      title: "",
+      description: "",
+      notes: "",
+      projectId: defaultProjectId,
+      priority: "MEDIUM",
+      status: "TODO",
+      dueDate: "",
+    }),
+    [defaultProjectId]
+  );
 
   const form = useForm<TaskInput>({
     resolver: zodResolver(taskSchema),
@@ -89,7 +92,7 @@ export function TaskFormSheet({
     if (open) {
       form.reset(task ?? emptyValues);
     }
-  }, [open, task, form]);
+  }, [open, task, emptyValues, form]);
 
   async function onSubmit(values: TaskInput) {
     const result = task ? await updateTask(task.id, values) : await createTask(values);
