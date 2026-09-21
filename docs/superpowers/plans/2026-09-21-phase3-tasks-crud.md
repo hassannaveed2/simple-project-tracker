@@ -17,18 +17,18 @@
 **Files:**
 - Create: `src/components/ui/checkbox.tsx`
 
-- [ ] **Step 1: Add the component**
+- [x] **Step 1: Add the component**
 
 ```bash
 npx shadcn@3.8.5 add checkbox --yes
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npm run build`
 Expected: build succeeds; `src/components/ui/checkbox.tsx` exists.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/ui/checkbox.tsx package.json package-lock.json
@@ -43,7 +43,7 @@ git commit -m "Add checkbox shadcn component"
 - Create: `src/lib/validations/task.ts`
 - Test: `src/lib/validations/task.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `src/lib/validations/task.test.ts`:
 ```ts
@@ -100,12 +100,12 @@ describe("taskSchema", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module './task'`
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `src/lib/validations/task.ts`:
 ```ts
@@ -147,12 +147,12 @@ client components. `dueDate` is a plain string (the value an `<input type="date"
 `"2026-09-25"`, or `""` for none) — converted to a `Date | null` only in `actions/tasks.ts`
 (server-only).
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (7 tests)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/validations/task.ts src/lib/validations/task.test.ts
@@ -167,7 +167,7 @@ git commit -m "Add task validation schema"
 - Create: `src/lib/format-due-date.ts`
 - Test: `src/lib/format-due-date.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `src/lib/format-due-date.test.ts`:
 ```ts
@@ -203,12 +203,12 @@ describe("formatDueDate", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module './format-due-date'`
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `src/lib/format-due-date.ts`:
 ```ts
@@ -258,12 +258,12 @@ type="date">` value like `"2026-09-25"` parses via `new Date("2026-09-25")` as U
 date-only form of the ECMAScript `Date` spec. Comparing in the server's local timezone instead
 could shift a date across a day boundary near midnight and mislabel it.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (5 tests)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/format-due-date.ts src/lib/format-due-date.test.ts
@@ -277,7 +277,7 @@ git commit -m "Add due date formatting"
 **Files:**
 - Create: `src/actions/tasks.ts`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/actions/tasks.ts`:
 ```ts
@@ -420,12 +420,12 @@ No unit test for this file, same reasoning as `actions/projects.ts` in Phase 2 �
 Prisma/Auth.js wrapper over the already-tested validation schema; verified by the manual browser
 pass in Task 11.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/actions/tasks.ts
@@ -439,7 +439,7 @@ git commit -m "Add task Server Actions"
 **Files:**
 - Create: `src/components/tasks/delete-task-dialog.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/tasks/delete-task-dialog.tsx`:
 ```tsx
@@ -520,12 +520,12 @@ export function DeleteTaskDialog({
 `TaskFormSheet` (Task 6) — a successful delete needs to close *both* the confirmation dialog and
 the parent edit sheet, and the dialog itself has no reference to the sheet's own open state.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/tasks/delete-task-dialog.tsx
@@ -539,7 +539,7 @@ git commit -m "Add delete task confirmation dialog"
 **Files:**
 - Create: `src/components/tasks/task-form-sheet.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/tasks/task-form-sheet.tsx`:
 ```tsx
@@ -824,12 +824,12 @@ All fields (including `status`) are always shown, even for a brand-new task defa
 avoids depending on React Hook Form's unregistered-field-still-submits-its-defaultValue behavior
 for a conditionally-hidden field.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/tasks/task-form-sheet.tsx
@@ -843,7 +843,7 @@ git commit -m "Add shared create/edit task sheet"
 **Files:**
 - Create: `src/components/tasks/add-task-button.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/tasks/add-task-button.tsx`:
 ```tsx
@@ -882,12 +882,12 @@ export function AddTaskButton({
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/tasks/add-task-button.tsx
@@ -905,7 +905,7 @@ This lives alongside the other project components (not `components/tasks/`) sinc
 `ProjectFormSheet` — it's needed now for the project detail page's header, reusing Phase 2's sheet
 exactly as the design doc calls for.
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/projects/edit-project-button.tsx`:
 ```tsx
@@ -932,12 +932,12 @@ export function EditProjectButton({ project }: { project: { id: string } & Proje
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/projects/edit-project-button.tsx
@@ -951,7 +951,7 @@ git commit -m "Add Edit Project button for the project detail page"
 **Files:**
 - Create: `src/components/tasks/task-list-item.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/tasks/task-list-item.tsx`:
 ```tsx
@@ -1041,12 +1041,12 @@ export function TaskListItem({
 `useTransition` wraps the checkbox toggle so it doesn't block the UI while the Server Action runs,
 and `isPending` disables the checkbox to prevent a double-click race.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/tasks/task-list-item.tsx
@@ -1060,7 +1060,7 @@ git commit -m "Add task list item"
 **Files:**
 - Create: `src/app/(dashboard)/projects/[id]/page.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/app/(dashboard)/projects/[id]/page.tsx`:
 ```tsx
@@ -1182,12 +1182,12 @@ tasks to the bottom and surfaces urgent/soon-due work first — Postgres (and Pr
 enums by their declared order, and both `TaskStatus` and `TaskPriority` were declared in exactly
 this ascending order in the Phase 1 schema, so no raw SQL or custom sort key is needed.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npm run build`
 Expected: build succeeds; `/projects/[id]` listed in the route table as a dynamic route.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add "src/app/(dashboard)/projects/[id]/page.tsx"
@@ -1198,7 +1198,7 @@ git commit -m "Wire up the project detail page with real tasks"
 
 ### Task 11: Final verification
 
-- [ ] **Step 1: Automated checks**
+- [x] **Step 1: Automated checks**
 
 ```bash
 npm run lint
@@ -1209,7 +1209,7 @@ npm run build
 
 Expected: all four succeed with no errors.
 
-- [ ] **Step 2: Manual browser walkthrough**
+- [x] **Step 2: Manual browser walkthrough**
 
 `npm run dev`, log in as the seeded demo user (`demo@example.com` / `password123`), then in a
 real browser:
@@ -1233,12 +1233,12 @@ real browser:
    page, not the first user's project
 9. Check the browser console for errors throughout — expect none
 
-- [ ] **Step 3: Clean up test data**
+- [x] **Step 3: Clean up test data**
 
 Delete any manually-created test tasks/projects/users from Step 2 that the UI itself didn't already
 remove, via `npx prisma studio` or a one-off script, so the seeded demo data stays the canonical
 dev fixture.
 
-- [ ] **Step 4: Update plan status**
+- [x] **Step 4: Update plan status**
 
 Mark all checkboxes in this plan complete once every step above has actually passed.
