@@ -25,7 +25,10 @@ Guardrails from the spec (do not violate without explicit user request):
   gaps (e.g. `form` has no files yet, silently no-ops). `3.8.5` is the last release with the
   classic `new-york` style and a complete Radix-based component set.
 - Prisma ORM **v5** (`prisma` and `@prisma/client` pinned to the 5.x line) — deliberately not v6
-- Neon Postgres for both dev and prod (same connection string architecture, no local Postgres)
+- Neon Postgres for both dev and prod (same connection string architecture, no local Postgres).
+  Note: `prisma init` crashes on Node.js 25.x (`Error: (0 , CSe.isError) is not a function`, a bug
+  in its update-check network call) — create `prisma/schema.prisma` and `.env` by hand instead.
+  `format`/`validate`/`generate`/`migrate dev` are all unaffected.
 - Auth.js v5 (`next-auth@beta`) with `@auth/prisma-adapter`, Credentials provider (email/password
   first; Google OAuth is optional/deferred), **JWT session strategy** (required because Credentials
   provider is incompatible with database sessions), `bcryptjs` for password hashing (pure JS, no

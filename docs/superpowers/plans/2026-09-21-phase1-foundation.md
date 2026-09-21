@@ -160,22 +160,32 @@ git commit -m "Initialize shadcn/ui and add base components"
 ```bash
 npm install -D prisma@5
 npm install @prisma/client@5
-npx prisma init --datasource-provider postgresql
 ```
 
-This creates `prisma/schema.prisma` (default) and a placeholder `.env`.
+- [ ] **Step 1a: Create `prisma/schema.prisma` and `.env` by hand (do not run `prisma init`)**
 
-- [ ] **Step 2: Confirm `.env` is gitignored, and add a placeholder `DIRECT_URL`**
+On Node.js 25.x, `prisma@5.22.0`'s `init` command crashes (`Error: (0 , CSe.isError) is not a
+function`) — it's a bug in `init`'s CLI-update-check network call specifically, not in Prisma
+itself: `prisma format`, `validate`, `generate`, and `migrate dev` all work fine on this Node
+version once the schema and `.env` exist. `init` only automates creating those two files, so
+create them directly instead:
 
 ```bash
+mkdir -p prisma
+touch prisma/schema.prisma
+echo 'DATABASE_URL="postgresql://placeholder"' > .env
 grep -qxF '.env' .gitignore || echo '.env' >> .gitignore
-grep -q '^DIRECT_URL=' .env || echo 'DIRECT_URL="postgresql://placeholder"' >> .env
 ```
 
-The schema below references both `DATABASE_URL` and `DIRECT_URL`. `prisma init` only wrote
-`DATABASE_URL` to `.env`, and Prisma's CLI errors on a completely undefined env var (not just an
-unreachable one) — so `DIRECT_URL` needs *some* value for `prisma validate` in Step 5 to pass,
-even before Task 5 supplies the real Neon URLs.
+- [ ] **Step 2: Add a placeholder `DIRECT_URL`**
+
+```bash
+echo 'DIRECT_URL="postgresql://placeholder"' >> .env
+```
+
+The schema below references both `DATABASE_URL` and `DIRECT_URL`. Prisma's CLI errors on a
+completely undefined env var (not just an unreachable one), so `DIRECT_URL` needs *some* value for
+`prisma validate` in Step 5 to pass, even before Task 5 supplies the real Neon URLs.
 
 - [ ] **Step 3: Replace `prisma/schema.prisma` with the full schema**
 
