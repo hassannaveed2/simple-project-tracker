@@ -97,9 +97,20 @@ of duplicating them.
 
 ## Commands
 
-Not yet established — no `package.json` exists yet (Phase 1 scaffolding is in progress). Update
-this section with the actual `dev`/`build`/`lint`/`prisma migrate`/`prisma db seed` commands once
-the project is scaffolded.
+- `npm run dev` — start the dev server
+- `npm run build` — production build
+- `npm run lint` — ESLint
+- `npx tsc --noEmit` — type-check without emitting
+- `npm test` — run Vitest once
+- `npm run test:watch` — run Vitest in watch mode
+- `npx prisma migrate dev --name <name>` — create and apply a migration
+- `npx prisma db seed` — run `prisma/seed.ts` (use `npx`, not the raw `node_modules/.bin/prisma`
+  path — the seed command spawns `tsx`, which needs `node_modules/.bin` on `PATH`, and only `npx`
+  guarantees that)
+- `npx prisma migrate reset` — drop, re-migrate, and re-seed the dev database
+- `npx prisma studio` — browse the database in a GUI
+
+Demo login after seeding: `demo@example.com` / `password123`.
 
 ### Neon connectivity on this machine
 

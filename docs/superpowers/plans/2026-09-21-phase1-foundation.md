@@ -19,7 +19,7 @@ The project directory already contains `prompt.md`, `CLAUDE.md`, `docs/`, and `.
 **Files:**
 - Create: everything `create-next-app` generates (`package.json`, `src/app/*`, `tsconfig.json`, `next.config.ts`, `.gitignore`, etc.)
 
-- [ ] **Step 1: Scaffold into a temp directory**
+- [x] **Step 1: Scaffold into a temp directory**
 
 ```bash
 SCAFFOLD_DIR=$(mktemp -d)
@@ -28,7 +28,7 @@ npx create-next-app@15 "$SCAFFOLD_DIR" --typescript --eslint --tailwind --app --
 
 If prompted about anything not covered by the flags (e.g. Turbopack for `next dev`), accept the default by pressing Enter.
 
-- [ ] **Step 2: Merge the scaffold into the project root**
+- [x] **Step 2: Merge the scaffold into the project root**
 
 ```bash
 rm -rf "$SCAFFOLD_DIR/.git"
@@ -36,12 +36,12 @@ cp -a "$SCAFFOLD_DIR"/. .
 rm -rf "$SCAFFOLD_DIR"
 ```
 
-- [ ] **Step 3: Verify it builds**
+- [x] **Step 3: Verify it builds**
 
 Run: `npm run build`
 Expected: build completes successfully, ending with a route summary table (the default `/` page).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add -A
@@ -56,13 +56,13 @@ git commit -m "Scaffold Next.js 15 app"
 - Create: `vitest.config.ts`
 - Modify: `package.json` (add `test`/`test:watch` scripts)
 
-- [ ] **Step 1: Install Vitest**
+- [x] **Step 1: Install Vitest**
 
 ```bash
 npm install -D vitest @vitejs/plugin-react vite-tsconfig-paths
 ```
 
-- [ ] **Step 2: Create the config**
+- [x] **Step 2: Create the config**
 
 `vitest.config.ts`:
 ```ts
@@ -80,7 +80,7 @@ export default defineConfig({
 });
 ```
 
-- [ ] **Step 3: Add scripts**
+- [x] **Step 3: Add scripts**
 
 In `package.json`, add to `"scripts"`:
 ```json
@@ -88,12 +88,12 @@ In `package.json`, add to `"scripts"`:
 "test:watch": "vitest"
 ```
 
-- [ ] **Step 4: Verify**
+- [x] **Step 4: Verify**
 
 Run: `npm test`
 Expected: exits 0 (no test files yet, `passWithNoTests` allows this).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add vitest.config.ts package.json package-lock.json
@@ -107,7 +107,7 @@ git commit -m "Add Vitest for unit tests"
 **Files:**
 - Create: `components.json`, `src/components/ui/{button,input,label,form,sheet,dropdown-menu,sonner}.tsx`, `src/lib/utils.ts`
 
-- [ ] **Step 1: Init shadcn/ui**
+- [x] **Step 1: Init shadcn/ui**
 
 Use `shadcn@3.8.5`, not `@latest`: the current `shadcn@latest` (4.x) defaults to a new
 "Base UI"-backed `base-nova` style whose `form` registry entry ships with no files yet (silently
@@ -118,7 +118,7 @@ style, full Radix-based component set, `form.tsx` included.
 npx shadcn@3.8.5 init -d
 ```
 
-- [ ] **Step 2: Install form and toast dependencies explicitly**
+- [x] **Step 2: Install form and toast dependencies explicitly**
 
 ```bash
 npm install react-hook-form zod @hookform/resolvers next-themes
@@ -128,18 +128,18 @@ shadcn's generated `sonner.tsx` wrapper imports `next-themes` (to sync toast the
 so it must already be installed before Step 3 adds that component — even though the theme
 *provider* itself isn't wired up until Task 14.
 
-- [ ] **Step 3: Add the components this phase needs**
+- [x] **Step 3: Add the components this phase needs**
 
 ```bash
 npx shadcn@3.8.5 add button input label form sheet dropdown-menu sonner --yes
 ```
 
-- [ ] **Step 4: Verify**
+- [x] **Step 4: Verify**
 
 Run: `npm run build`
 Expected: build still succeeds; `src/components/ui/` now contains the added components.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add -A
@@ -155,14 +155,14 @@ git commit -m "Initialize shadcn/ui and add base components"
 - Modify: `package.json` (add `postinstall` script)
 - Modify: `.gitignore` (ensure `.env` is ignored)
 
-- [ ] **Step 1: Install Prisma 5**
+- [x] **Step 1: Install Prisma 5**
 
 ```bash
 npm install -D prisma@5
 npm install @prisma/client@5
 ```
 
-- [ ] **Step 1a: Create `prisma/schema.prisma` and `.env` by hand (do not run `prisma init`)**
+- [x] **Step 1a: Create `prisma/schema.prisma` and `.env` by hand (do not run `prisma init`)**
 
 On Node.js 25.x, `prisma@5.22.0`'s `init` command crashes (`Error: (0 , CSe.isError) is not a
 function`) — it's a bug in `init`'s CLI-update-check network call specifically, not in Prisma
@@ -177,7 +177,7 @@ echo 'DATABASE_URL="postgresql://placeholder"' > .env
 grep -qxF '.env' .gitignore || echo '.env' >> .gitignore
 ```
 
-- [ ] **Step 2: Add a placeholder `DIRECT_URL`**
+- [x] **Step 2: Add a placeholder `DIRECT_URL`**
 
 ```bash
 echo 'DIRECT_URL="postgresql://placeholder"' >> .env
@@ -187,7 +187,7 @@ The schema below references both `DATABASE_URL` and `DIRECT_URL`. Prisma's CLI e
 completely undefined env var (not just an unreachable one), so `DIRECT_URL` needs *some* value for
 `prisma validate` in Step 5 to pass, even before Task 5 supplies the real Neon URLs.
 
-- [ ] **Step 3: Replace `prisma/schema.prisma` with the full schema**
+- [x] **Step 3: Replace `prisma/schema.prisma` with the full schema**
 
 `prisma/schema.prisma`:
 ```prisma
@@ -295,19 +295,19 @@ model Activity {
 
 Note: `User.password` is an addition beyond the fields literally listed in `prompt.md` — it's required to support email/password auth, which the spec explicitly asks for. `Activity.type` is a plain `String` rather than an enum so new lightweight event types don't require a migration.
 
-- [ ] **Step 4: Add `postinstall` so Vercel generates the client on deploy**
+- [x] **Step 4: Add `postinstall` so Vercel generates the client on deploy**
 
 In `package.json`, add to `"scripts"`:
 ```json
 "postinstall": "prisma generate"
 ```
 
-- [ ] **Step 5: Validate the schema**
+- [x] **Step 5: Validate the schema**
 
 Run: `npx prisma format && npx prisma validate`
 Expected: `The schema at prisma/schema.prisma is valid 🚀` (this only checks syntax — no DB connection needed yet).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add prisma package.json .gitignore
@@ -320,11 +320,11 @@ git commit -m "Add Prisma schema for User, Project, Task, Activity"
 
 This task requires you (not the agent) to create a Neon project.
 
-- [ ] **Step 1: Create a Neon project**
+- [x] **Step 1: Create a Neon project**
 
 Go to https://console.neon.tech, create a project (any region/name). Neon gives you a pooled connection string and a direct one.
 
-- [ ] **Step 2: Write `.env.example`**
+- [x] **Step 2: Write `.env.example`**
 
 `.env.example`:
 ```bash
@@ -341,7 +341,7 @@ AUTH_URL="http://localhost:3000"
 # GOOGLE_CLIENT_SECRET=""
 ```
 
-- [ ] **Step 3: Fill in your real `.env`**
+- [x] **Step 3: Fill in your real `.env`**
 
 Edit `.env` (created by hand in Task 4, already gitignored) with your actual Neon `DATABASE_URL`
 and `DIRECT_URL` — replacing the `postgresql://placeholder` values. Neon typically only surfaces
@@ -358,7 +358,7 @@ echo "AUTH_SECRET=\"$SECRET\"" >> .env
 echo 'AUTH_URL="http://localhost:3000"' >> .env
 ```
 
-- [ ] **Step 4: Commit `.env.example`**
+- [x] **Step 4: Commit `.env.example`**
 
 `.gitignore`'s `.env*` pattern also matches `.env.example` — add a negation so the template stays
 tracked while real `.env` files stay ignored:
@@ -378,7 +378,7 @@ git commit -m "Add .env.example"
 **Files:**
 - Create: `src/lib/db.ts`, `prisma/migrations/**` (generated)
 
-- [ ] **Step 1: Run the migration**
+- [x] **Step 1: Run the migration**
 
 ```bash
 npx prisma migrate dev --name init
@@ -394,7 +394,7 @@ switching `.env`'s `DATABASE_URL`/`DIRECT_URL` to use the IPv4 address plus Neon
 this machine" in `CLAUDE.md` and the comment block in `.env.example` for the exact recipe. This
 stays entirely inside `.env`; no system files need to change.
 
-- [ ] **Step 2: Create the Prisma client singleton**
+- [x] **Step 2: Create the Prisma client singleton**
 
 `src/lib/db.ts`:
 ```ts
@@ -411,12 +411,12 @@ if (process.env.NODE_ENV !== "production") {
 }
 ```
 
-- [ ] **Step 3: Verify**
+- [x] **Step 3: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add prisma/migrations src/lib/db.ts
@@ -431,14 +431,14 @@ git commit -m "Run initial Prisma migration, add Prisma client singleton"
 - Create: `src/lib/auth/password.ts`
 - Test: `src/lib/auth/password.test.ts`
 
-- [ ] **Step 1: Install bcryptjs**
+- [x] **Step 1: Install bcryptjs**
 
 ```bash
 npm install bcryptjs
 npm install -D @types/bcryptjs
 ```
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 `src/lib/auth/password.test.ts`:
 ```ts
@@ -464,12 +464,12 @@ describe("password hashing", () => {
 });
 ```
 
-- [ ] **Step 3: Run test to verify it fails**
+- [x] **Step 3: Run test to verify it fails**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module './password'`
 
-- [ ] **Step 4: Implement**
+- [x] **Step 4: Implement**
 
 `src/lib/auth/password.ts`:
 ```ts
@@ -486,12 +486,12 @@ export function verifyPassword(password: string, hash: string): Promise<boolean>
 }
 ```
 
-- [ ] **Step 5: Run test to verify it passes**
+- [x] **Step 5: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (3 tests)
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/lib/auth/password.ts src/lib/auth/password.test.ts package.json package-lock.json
@@ -506,7 +506,7 @@ git commit -m "Add password hashing utility"
 - Create: `src/lib/validations/auth.ts`
 - Test: `src/lib/validations/auth.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `src/lib/validations/auth.test.ts`:
 ```ts
@@ -566,12 +566,12 @@ describe("loginSchema", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module './auth'`
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `src/lib/validations/auth.ts`:
 ```ts
@@ -592,12 +592,12 @@ export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (6 tests)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/validations/auth.ts src/lib/validations/auth.test.ts
@@ -618,13 +618,13 @@ The credential-checking logic is extracted into a standalone `authenticateUser` 
 - Create: `src/types/next-auth.d.ts`
 - Create: `src/app/api/auth/[...nextauth]/route.ts`
 
-- [ ] **Step 1: Install Auth.js v5**
+- [x] **Step 1: Install Auth.js v5**
 
 ```bash
 npm install next-auth@beta
 ```
 
-- [ ] **Step 2: Write the failing test**
+- [x] **Step 2: Write the failing test**
 
 `src/lib/auth/authenticate-user.test.ts`:
 ```ts
@@ -689,12 +689,12 @@ describe("authenticateUser", () => {
 });
 ```
 
-- [ ] **Step 3: Run test to verify it fails**
+- [x] **Step 3: Run test to verify it fails**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module './authenticate-user'`
 
-- [ ] **Step 4: Implement**
+- [x] **Step 4: Implement**
 
 `src/lib/auth/authenticate-user.ts`:
 ```ts
@@ -726,12 +726,12 @@ export async function authenticateUser(
 }
 ```
 
-- [ ] **Step 5: Run test to verify it passes**
+- [x] **Step 5: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (4 tests)
 
-- [ ] **Step 6: Create the edge-safe auth config**
+- [x] **Step 6: Create the edge-safe auth config**
 
 `src/lib/auth.config.ts`:
 ```ts
@@ -762,7 +762,7 @@ export const authConfig = {
 
 This file must never import `@/lib/db` (Prisma) — it's loaded by middleware, which runs on the Edge runtime where Prisma 5's client cannot run.
 
-- [ ] **Step 7: Create the full auth config**
+- [x] **Step 7: Create the full auth config**
 
 `src/lib/auth.ts`:
 ```ts
@@ -786,7 +786,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 });
 ```
 
-- [ ] **Step 8: Add session type augmentation**
+- [x] **Step 8: Add session type augmentation**
 
 `src/types/next-auth.d.ts`:
 ```ts
@@ -801,7 +801,7 @@ declare module "next-auth" {
 }
 ```
 
-- [ ] **Step 9: Add the route handler**
+- [x] **Step 9: Add the route handler**
 
 `src/app/api/auth/[...nextauth]/route.ts`:
 ```ts
@@ -810,12 +810,12 @@ import { handlers } from "@/lib/auth";
 export const { GET, POST } = handlers;
 ```
 
-- [ ] **Step 10: Verify**
+- [x] **Step 10: Verify**
 
 Run: `npx tsc --noEmit && npm test`
 Expected: no type errors, all tests pass.
 
-- [ ] **Step 11: Commit**
+- [x] **Step 11: Commit**
 
 ```bash
 git add src/lib/auth src/lib/auth.ts src/lib/auth.config.ts src/types/next-auth.d.ts src/app/api/auth package.json package-lock.json
@@ -829,7 +829,7 @@ git commit -m "Add Auth.js v5 configuration with Credentials provider"
 **Files:**
 - Create: `src/middleware.ts`
 
-- [ ] **Step 1: Create the middleware**
+- [x] **Step 1: Create the middleware**
 
 `src/middleware.ts`:
 ```ts
@@ -845,12 +845,12 @@ export const config = {
 
 This instantiates a second, edge-safe `NextAuth` using only `authConfig` (no Credentials provider, no Prisma) — it can only read/verify the JWT session cookie, which is all middleware needs to decide whether to redirect.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npm run build`
 Expected: build succeeds with no Edge runtime warnings about Prisma.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/middleware.ts
@@ -866,7 +866,7 @@ git commit -m "Add middleware route protection"
 - Create: `src/components/auth/register-form.tsx`
 - Create: `src/app/auth/register/page.tsx`
 
-- [ ] **Step 1: Add the register server action**
+- [x] **Step 1: Add the register server action**
 
 `src/actions/auth.ts`:
 ```ts
@@ -903,7 +903,7 @@ export async function registerUser(input: RegisterInput): Promise<RegisterResult
 }
 ```
 
-- [ ] **Step 2: Add the register form**
+- [x] **Step 2: Add the register form**
 
 `src/components/auth/register-form.tsx`:
 ```tsx
@@ -994,7 +994,7 @@ export function RegisterForm() {
 }
 ```
 
-- [ ] **Step 3: Add the register page**
+- [x] **Step 3: Add the register page**
 
 `src/app/auth/register/page.tsx`:
 ```tsx
@@ -1027,14 +1027,14 @@ export default function RegisterPage() {
 }
 ```
 
-- [ ] **Step 4: Verify**
+- [x] **Step 4: Verify**
 
 Run: `npm run build`
 Expected: build succeeds, `/auth/register` listed in the route table.
 
 Manual check: `npm run dev`, visit `http://localhost:3000/auth/register`, submit the form, confirm a success toast and redirect to `/auth/login`, and confirm the user row exists (`npx prisma studio`).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/actions/auth.ts src/components/auth/register-form.tsx src/app/auth/register
@@ -1049,7 +1049,7 @@ git commit -m "Add register page"
 - Create: `src/components/auth/login-form.tsx`
 - Create: `src/app/auth/login/page.tsx`
 
-- [ ] **Step 1: Add the login form**
+- [x] **Step 1: Add the login form**
 
 `src/components/auth/login-form.tsx`:
 ```tsx
@@ -1127,7 +1127,7 @@ export function LoginForm() {
 }
 ```
 
-- [ ] **Step 2: Add the login page**
+- [x] **Step 2: Add the login page**
 
 `src/app/auth/login/page.tsx`:
 ```tsx
@@ -1158,14 +1158,14 @@ export default function LoginPage() {
 }
 ```
 
-- [ ] **Step 3: Verify**
+- [x] **Step 3: Verify**
 
 Run: `npm run build`
 Expected: build succeeds.
 
 Manual check: `npm run dev`, log in with the account created in Task 11, confirm redirect to `/` and no console errors. Visit `/today` while logged out (use an incognito window) and confirm middleware redirects to `/auth/login`.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/components/auth/login-form.tsx src/app/auth/login
@@ -1180,13 +1180,13 @@ git commit -m "Add login page"
 - Create: `prisma/seed.ts`
 - Modify: `package.json` (add `prisma.seed` config)
 
-- [ ] **Step 1: Install tsx**
+- [x] **Step 1: Install tsx**
 
 ```bash
 npm install -D tsx
 ```
 
-- [ ] **Step 2: Write the seed script**
+- [x] **Step 2: Write the seed script**
 
 `prisma/seed.ts`:
 ```ts
@@ -1289,7 +1289,7 @@ main()
   });
 ```
 
-- [ ] **Step 3: Register the seed command**
+- [x] **Step 3: Register the seed command**
 
 In `package.json`, add a top-level key (sibling of `"scripts"`):
 ```json
@@ -1298,14 +1298,14 @@ In `package.json`, add a top-level key (sibling of `"scripts"`):
 }
 ```
 
-- [ ] **Step 4: Run it**
+- [x] **Step 4: Run it**
 
 Run: `npx prisma db seed`
 Expected: prints `Seeded user demo@example.com with projects: Client Website, Personal Website`.
 
 Note: re-running creates duplicate projects (the user upsert is idempotent, the projects aren't). To reset cleanly during development, use `npx prisma migrate reset` (drops, re-migrates, and re-seeds).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add prisma/seed.ts package.json package-lock.json
@@ -1324,7 +1324,7 @@ git commit -m "Add seed script with demo user, projects, and tasks"
 `next-themes` was already installed in Task 3 (as a dependency of shadcn's `sonner.tsx` wrapper),
 so this task only wires up the provider.
 
-- [ ] **Step 1: Add the theme provider wrapper**
+- [x] **Step 1: Add the theme provider wrapper**
 
 `src/components/theme-provider.tsx`:
 ```tsx
@@ -1341,7 +1341,7 @@ export function ThemeProvider({
 }
 ```
 
-- [ ] **Step 2: Add the theme toggle**
+- [x] **Step 2: Add the theme toggle**
 
 `src/components/layout/theme-toggle.tsx`:
 ```tsx
@@ -1378,7 +1378,7 @@ export function ThemeToggle() {
 }
 ```
 
-- [ ] **Step 3: Wire the provider and toaster into the root layout**
+- [x] **Step 3: Wire the provider and toaster into the root layout**
 
 Open `src/app/layout.tsx` (generated in Task 1). Wrap the existing `{children}` in `<ThemeProvider>`, add `suppressHydrationWarning` to the `<html>` tag, and render `<Toaster />` from `@/components/ui/sonner` after `{children}`. Keep whatever font variables/imports Task 1 already generated — only add the provider, toaster, and `suppressHydrationWarning`. The result should look like this shape:
 
@@ -1409,14 +1409,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-- [ ] **Step 4: Verify**
+- [x] **Step 4: Verify**
 
 Run: `npm run build`
 Expected: build succeeds.
 
 Manual check: `npm run dev`, open the app, use the theme toggle (once wired into the sidebar in Task 15) — for now confirm no console/hydration errors on any page.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/theme-provider.tsx src/components/layout/theme-toggle.tsx src/app/layout.tsx
@@ -1436,13 +1436,13 @@ This introduces the `(dashboard)` route group. `create-next-app` generated `src/
 - Create: `src/app/(dashboard)/layout.tsx`
 - Delete: `src/app/page.tsx`
 
-- [ ] **Step 1: Remove the default page**
+- [x] **Step 1: Remove the default page**
 
 ```bash
 rm src/app/page.tsx
 ```
 
-- [ ] **Step 2: Add shared nav config**
+- [x] **Step 2: Add shared nav config**
 
 `src/components/layout/nav-items.ts`:
 ```ts
@@ -1475,7 +1475,7 @@ export const secondaryNavItems: NavItem[] = [
 ];
 ```
 
-- [ ] **Step 3: Add the desktop sidebar**
+- [x] **Step 3: Add the desktop sidebar**
 
 `src/components/layout/sidebar.tsx`:
 ```tsx
@@ -1528,7 +1528,7 @@ function SidebarLink({ item, active }: { item: NavItem; active: boolean }) {
 }
 ```
 
-- [ ] **Step 4: Add the mobile nav**
+- [x] **Step 4: Add the mobile nav**
 
 `src/components/layout/mobile-nav.tsx`:
 ```tsx
@@ -1581,7 +1581,7 @@ export function MobileNav() {
 }
 ```
 
-- [ ] **Step 5: Add the dashboard shell layout**
+- [x] **Step 5: Add the dashboard shell layout**
 
 `src/app/(dashboard)/layout.tsx`:
 ```tsx
@@ -1613,12 +1613,12 @@ export default async function DashboardLayout({
 }
 ```
 
-- [ ] **Step 6: Verify**
+- [x] **Step 6: Verify**
 
 Run: `npm run build`
 Expected: build succeeds, no "duplicate page" error for `/`.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add -A
@@ -1637,7 +1637,7 @@ git commit -m "Add sidebar, mobile nav, and dashboard shell layout"
 - Create: `src/app/(dashboard)/completed/page.tsx`
 - Create: `src/app/(dashboard)/settings/page.tsx`
 
-- [ ] **Step 1: Dashboard placeholder**
+- [x] **Step 1: Dashboard placeholder**
 
 `src/app/(dashboard)/page.tsx`:
 ```tsx
@@ -1651,7 +1651,7 @@ export default function DashboardPage() {
 }
 ```
 
-- [ ] **Step 2: Projects placeholder**
+- [x] **Step 2: Projects placeholder**
 
 `src/app/(dashboard)/projects/page.tsx`:
 ```tsx
@@ -1665,7 +1665,7 @@ export default function ProjectsPage() {
 }
 ```
 
-- [ ] **Step 3: Today placeholder**
+- [x] **Step 3: Today placeholder**
 
 `src/app/(dashboard)/today/page.tsx`:
 ```tsx
@@ -1679,7 +1679,7 @@ export default function TodayPage() {
 }
 ```
 
-- [ ] **Step 4: Upcoming placeholder**
+- [x] **Step 4: Upcoming placeholder**
 
 `src/app/(dashboard)/upcoming/page.tsx`:
 ```tsx
@@ -1693,7 +1693,7 @@ export default function UpcomingPage() {
 }
 ```
 
-- [ ] **Step 5: Completed placeholder**
+- [x] **Step 5: Completed placeholder**
 
 `src/app/(dashboard)/completed/page.tsx`:
 ```tsx
@@ -1707,7 +1707,7 @@ export default function CompletedPage() {
 }
 ```
 
-- [ ] **Step 6: Settings placeholder**
+- [x] **Step 6: Settings placeholder**
 
 `src/app/(dashboard)/settings/page.tsx`:
 ```tsx
@@ -1721,14 +1721,14 @@ export default function SettingsPage() {
 }
 ```
 
-- [ ] **Step 7: Verify**
+- [x] **Step 7: Verify**
 
 Run: `npm run build`
 Expected: build succeeds, all six routes listed in the route table.
 
 Manual check: `npm run dev`, log in, click through every sidebar link and every mobile nav link, confirm each renders its placeholder with no errors.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/app/\(dashboard\)
@@ -1742,7 +1742,7 @@ git commit -m "Add placeholder pages for all nav routes"
 **Files:**
 - Modify: `CLAUDE.md`
 
-- [ ] **Step 1: Full verification pass**
+- [x] **Step 1: Full verification pass**
 
 ```bash
 npm run lint
@@ -1753,7 +1753,7 @@ npm run build
 
 Expected: all four succeed with no errors.
 
-- [ ] **Step 2: Manual smoke test**
+- [x] **Step 2: Manual smoke test**
 
 `npm run dev`, then in a browser:
 1. Register a new account at `/auth/register` → confirm success toast + redirect to `/auth/login`
@@ -1762,7 +1762,7 @@ Expected: all four succeed with no errors.
 4. Toggle theme light/dark/system via the sidebar → confirm it applies immediately and persists across a page reload
 5. Narrow the browser window below tablet width → confirm the sidebar disappears and the mobile menu button appears and opens the drawer nav
 
-- [ ] **Step 3: Update CLAUDE.md's Commands section**
+- [x] **Step 3: Update CLAUDE.md's Commands section**
 
 Replace the "Not yet established" placeholder in `CLAUDE.md`'s `## Commands` section with:
 
@@ -1783,7 +1783,7 @@ Replace the "Not yet established" placeholder in `CLAUDE.md`'s `## Commands` sec
 Demo login after seeding: `demo@example.com` / `password123`.
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add CLAUDE.md
