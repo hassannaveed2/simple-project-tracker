@@ -22,11 +22,14 @@ Phases 2+.
   install/Docker). The user will create the Neon project and paste `DATABASE_URL`/`DIRECT_URL`
   into `.env` when the scaffold reaches that point — this phase's setup instructions must call
   out that pause point explicitly.
-- **Auth**: Auth.js v5 (`next-auth@beta`) + `@auth/prisma-adapter`. Credentials provider
-  (email/password) only for now — Google OAuth is deferred (spec marks it optional). Credentials
-  provider forces **JWT session strategy** (Auth.js does not support database sessions with
-  Credentials). Passwords hashed with `bcryptjs` (pure JS — no native binary, avoids Vercel
-  serverless build issues that native `bcrypt`/`argon2` can hit).
+- **Auth**: Auth.js v5 (`next-auth@beta`), Credentials provider (email/password) only for now —
+  Google OAuth is deferred (spec marks it optional). Credentials provider forces **JWT session
+  strategy** (Auth.js does not support database sessions with Credentials). `@auth/prisma-adapter`
+  is deliberately *not* added in this phase — it has no effect on the Credentials flow (Auth.js
+  never calls adapter methods for Credentials sign-in) and only earns its place once Google OAuth
+  needs account linking; registration and login talk to Prisma directly. Passwords hashed with
+  `bcryptjs` (pure JS — no native binary, avoids Vercel serverless build issues that native
+  `bcrypt`/`argon2` can hit).
 - **Route protection**: Next.js middleware checks the session and redirects unauthenticated
   requests to `/auth/login`. Every Server Action added in later phases must additionally scope
   its own Prisma queries by `session.user.id` — middleware alone does not enforce data isolation
