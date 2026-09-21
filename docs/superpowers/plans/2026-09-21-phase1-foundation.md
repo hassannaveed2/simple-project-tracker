@@ -343,7 +343,8 @@ AUTH_URL="http://localhost:3000"
 
 - [ ] **Step 3: Fill in your real `.env`**
 
-Edit `.env` (already created by `prisma init` in Task 4, already gitignored) with your actual Neon `DATABASE_URL` and `DIRECT_URL`, plus:
+Edit `.env` (created by hand in Task 4, already gitignored) with your actual Neon `DATABASE_URL`
+and `DIRECT_URL` — replacing the `postgresql://placeholder` values — plus:
 
 ```bash
 npx auth secret
@@ -353,8 +354,12 @@ This generates `AUTH_SECRET` and appends it to `.env` automatically. Add `AUTH_U
 
 - [ ] **Step 4: Commit `.env.example`**
 
+`.gitignore`'s `.env*` pattern also matches `.env.example` — add a negation so the template stays
+tracked while real `.env` files stay ignored:
+
 ```bash
-git add .env.example
+grep -qxF '!.env.example' .gitignore || echo '!.env.example' >> .gitignore
+git add .gitignore .env.example
 git commit -m "Add .env.example"
 ```
 
