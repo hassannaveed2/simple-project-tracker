@@ -17,18 +17,18 @@
 **Files:**
 - Create: `src/components/ui/{textarea,select,alert-dialog,badge}.tsx`
 
-- [ ] **Step 1: Add the components**
+- [x] **Step 1: Add the components**
 
 ```bash
 npx shadcn@3.8.5 add textarea select alert-dialog badge --yes
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npm run build`
 Expected: build succeeds; the four new files exist under `src/components/ui/`.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/ui
@@ -43,7 +43,7 @@ git commit -m "Add textarea, select, alert-dialog, badge shadcn components"
 - Create: `src/lib/progress.ts`
 - Test: `src/lib/progress.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `src/lib/progress.test.ts`:
 ```ts
@@ -85,12 +85,12 @@ describe("computeProjectProgress", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module './progress'`
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `src/lib/progress.ts`:
 ```ts
@@ -108,12 +108,12 @@ export function computeProjectProgress(taskStatuses: string[]): ProjectProgress 
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (4 tests)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/progress.ts src/lib/progress.test.ts
@@ -128,7 +128,7 @@ git commit -m "Add project progress calculation"
 - Create: `src/lib/format-relative-time.ts`
 - Test: `src/lib/format-relative-time.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `src/lib/format-relative-time.test.ts`:
 ```ts
@@ -165,12 +165,12 @@ describe("formatRelativeTime", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module './format-relative-time'`
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `src/lib/format-relative-time.ts`:
 ```ts
@@ -188,12 +188,12 @@ export function formatRelativeTime(date: Date, now: Date = new Date()): string {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (5 tests)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/format-relative-time.ts src/lib/format-relative-time.test.ts
@@ -208,7 +208,7 @@ git commit -m "Add relative time formatting"
 - Create: `src/lib/validations/project.ts`
 - Test: `src/lib/validations/project.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `src/lib/validations/project.test.ts`:
 ```ts
@@ -274,12 +274,12 @@ describe("projectSchema", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module './project'`
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `src/lib/validations/project.ts`:
 ```ts
@@ -322,12 +322,12 @@ Note: `color`/`status` are defined as our own string-literal unions here rather 
 generated Prisma module avoids any risk of pulling Prisma's client/engine code into a client
 bundle. `actions/projects.ts` (Task 5, server-only) bridges the two.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (6 tests)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/validations/project.ts src/lib/validations/project.test.ts
@@ -341,7 +341,7 @@ git commit -m "Add project validation schema"
 **Files:**
 - Create: `src/actions/projects.ts`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/actions/projects.ts`:
 ```ts
@@ -442,12 +442,12 @@ export async function deleteProject(projectId: string): Promise<ProjectActionRes
 
 No unit test for this file: it's a thin Prisma/Auth.js wrapper over the already-tested validation schema, and testing it meaningfully would require a real or mocked database — that's the integration-test territory this project's testing approach explicitly excludes (per the "unit tests for logic only" decision made for Phase 1). It's covered by the manual browser verification in Task 11 instead.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/actions/projects.ts
@@ -461,7 +461,7 @@ git commit -m "Add project Server Actions"
 **Files:**
 - Create: `src/components/projects/project-form-sheet.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/projects/project-form-sheet.tsx`:
 ```tsx
@@ -662,12 +662,12 @@ export function ProjectFormSheet({ open, onOpenChange, project }: ProjectFormShe
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors. (Full render verification happens in Task 11's manual browser pass, once this is wired into the page.)
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/projects/project-form-sheet.tsx
@@ -681,7 +681,7 @@ git commit -m "Add shared create/edit project sheet"
 **Files:**
 - Create: `src/components/projects/new-project-button.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/projects/new-project-button.tsx`:
 ```tsx
@@ -707,12 +707,12 @@ export function NewProjectButton({ label = "New Project" }: { label?: string }) 
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/projects/new-project-button.tsx
@@ -726,7 +726,7 @@ git commit -m "Add New Project button"
 **Files:**
 - Create: `src/components/projects/delete-project-dialog.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/projects/delete-project-dialog.tsx`:
 ```tsx
@@ -804,12 +804,12 @@ export function DeleteProjectDialog({
 click — needed because the dialog should stay open (showing "Deleting…") until the async action
 resolves, then close itself via `onOpenChange(false)` only on success.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/projects/delete-project-dialog.tsx
@@ -823,7 +823,7 @@ git commit -m "Add delete project confirmation dialog"
 **Files:**
 - Create: `src/components/projects/project-card.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/projects/project-card.tsx`:
 ```tsx
@@ -944,12 +944,12 @@ export function ProjectCard({ project }: { project: ProjectCardData }) {
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/projects/project-card.tsx
@@ -963,7 +963,7 @@ git commit -m "Add project card"
 **Files:**
 - Modify: `src/app/(dashboard)/projects/page.tsx`
 
-- [ ] **Step 1: Replace the placeholder page**
+- [x] **Step 1: Replace the placeholder page**
 
 `src/app/(dashboard)/projects/page.tsx`:
 ```tsx
@@ -1033,12 +1033,12 @@ export default async function ProjectsPage() {
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npm run build`
 Expected: build succeeds, `/projects` still listed in the route table.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add "src/app/(dashboard)/projects/page.tsx"
@@ -1049,7 +1049,7 @@ git commit -m "Wire up the /projects page with real data"
 
 ### Task 11: Final verification
 
-- [ ] **Step 1: Automated checks**
+- [x] **Step 1: Automated checks**
 
 ```bash
 npm run lint
@@ -1060,7 +1060,7 @@ npm run build
 
 Expected: all four succeed with no errors.
 
-- [ ] **Step 2: Manual browser walkthrough**
+- [x] **Step 2: Manual browser walkthrough**
 
 `npm run dev`, log in as the seeded demo user (`demo@example.com` / `password123`), then in a
 real browser (not curl — this flow is all Server Actions and client state):
@@ -1078,12 +1078,12 @@ real browser (not curl — this flow is all Server Actions and client state):
    state ("Create your first project…"), not the first user's projects
 7. Check the browser console for errors throughout — expect none
 
-- [ ] **Step 3: Clean up test data**
+- [x] **Step 3: Clean up test data**
 
 Delete any manually-created test projects/users from steps 2–6 that weren't already removed via
 the UI itself, via `npx prisma studio` or a one-off script, so the seeded demo data stays the
 canonical dev fixture.
 
-- [ ] **Step 4: Update plan status**
+- [x] **Step 4: Update plan status**
 
 Mark all checkboxes in this plan complete once every step above has actually passed.
