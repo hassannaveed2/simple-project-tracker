@@ -28,11 +28,13 @@ Guardrails from the spec (do not violate without explicit user request):
 - Neon Postgres for both dev and prod (same connection string architecture, no local Postgres).
   Note: `prisma init` crashes on Node.js 25.x (`Error: (0 , CSe.isError) is not a function`, a bug
   in its update-check network call) — create `prisma/schema.prisma` and `.env` by hand instead.
-  `format`/`validate`/`generate`/`migrate dev` are all unaffected.
-- Auth.js v5 (`next-auth@beta`) with `@auth/prisma-adapter`, Credentials provider (email/password
-  first; Google OAuth is optional/deferred), **JWT session strategy** (required because Credentials
-  provider is incompatible with database sessions), `bcryptjs` for password hashing (pure JS, no
-  native build step — matters for Vercel's serverless functions)
+  `format`/`validate`/`generate`/`migrate dev` are all unaffected. See "Neon connectivity on this
+  machine" below if `migrate dev`/`db seed`/`dev` hang trying to reach the database.
+- Auth.js v5 (`next-auth@beta`), Credentials provider only (email/password; Google OAuth is
+  optional/deferred), no `@auth/prisma-adapter` (not needed for Credentials — see the Phase 1
+  design doc), **JWT session strategy** (required because Credentials provider is incompatible
+  with database sessions), `bcryptjs` for password hashing (pure JS, no native build step —
+  matters for Vercel's serverless functions)
 - Zod for validation, React Hook Form for forms
 - dnd-kit for drag-and-drop (kept deliberately minimal — simple Kanban reordering only)
 - Sonner for toasts, Lucide React for icons
@@ -98,3 +100,28 @@ of duplicating them.
 Not yet established — no `package.json` exists yet (Phase 1 scaffolding is in progress). Update
 this section with the actual `dev`/`build`/`lint`/`prisma migrate`/`prisma db seed` commands once
 the project is scaffolded.
+
+### Neon connectivity on this machine
+
+This machine's IPv6 default route is stale/non-functional (a router-advertised link-local gateway
+that doesn't actually forward packets), but `getaddrinfo` still returns IPv6 addresses first for
+Neon's hostname, so any raw TCP connection (Prisma, `pg`, etc.) hangs until timeout. Confirmed via
+`getent hosts <host>` (IPv6-only) vs `getent ahostsv4 <host>` (real IPv4s exist) plus raw
+`/dev/tcp` connect tests — IPv4 itself works fine.
+
+Fix used (kept entirely inside `.env`, no system files touched): connect via the IPv4 address
+directly and pass Neon's endpoint ID as a connection option, which is Neon's documented mechanism
+for clients that can't rely on SNI-based routing (normally the hostname implies which backend to
+route to via SNI; connecting by bare IP has no hostname/SNI to route on):
+
+```
+postgresql://<user>:<password>@<ipv4>:5432/<db>?sslmode=require&options=endpoint%3D<endpoint-id>
+```
+
+`<endpoint-id>` is the `ep-...` segment of the original hostname — include the `-pooler` suffix
+for `DATABASE_URL` (pooled), omit it for `DIRECT_URL`. Both hostnames resolve to the same IPv4
+proxy addresses; routing happens via this parameter, not the IP itself.
+
+If this ever stops connecting, re-run `getent ahostsv4 <original-neon-hostname>` — Neon's proxy
+IPs aren't guaranteed permanent — and update `.env` with the new address. See `.env.example` for
+the full recipe.

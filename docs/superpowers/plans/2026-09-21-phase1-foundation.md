@@ -386,6 +386,14 @@ npx prisma migrate dev --name init
 
 Expected: creates `prisma/migrations/<timestamp>_init/`, applies it to Neon, regenerates the client, prints `Your database is now in sync with your schema.`
 
+If this hangs and times out trying to reach the database, but `curl` to any HTTPS site works fine,
+suspect a broken IPv6 default route (common in some dev environments): `getent hosts <neon-host>`
+returning only IPv6 while `getent ahostsv4 <neon-host>` returns real addresses confirms it. Fix by
+switching `.env`'s `DATABASE_URL`/`DIRECT_URL` to use the IPv4 address plus Neon's documented
+`options=endpoint%3D<endpoint-id>` parameter instead of the hostname — see "Neon connectivity on
+this machine" in `CLAUDE.md` and the comment block in `.env.example` for the exact recipe. This
+stays entirely inside `.env`; no system files need to change.
+
 - [ ] **Step 2: Create the Prisma client singleton**
 
 `src/lib/db.ts`:
