@@ -11,16 +11,16 @@ import type { ProjectInput } from "@/lib/validations/project";
 export default async function ProjectDetailPage({
   params,
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { id } = await params;
+  const { slug } = await params;
   // The (dashboard) layout already redirects unauthenticated requests before this page renders,
   // so a session is guaranteed here.
   const session = await auth();
   const userId = session!.user.id;
 
   const project = await prisma.project.findFirst({
-    where: { id, userId },
+    where: { slug, userId },
     include: {
       tasks: {
         orderBy: [{ status: "asc" }, { priority: "desc" }, { dueDate: "asc" }],
