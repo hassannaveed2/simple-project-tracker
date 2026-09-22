@@ -40,7 +40,7 @@ export async function createTask(input: TaskInput): Promise<TaskActionResult> {
   // against this user's projects before we attach a task to it.
   const project = await prisma.project.findFirst({
     where: { id: parsed.data.projectId, userId },
-    select: { id: true, name: true },
+    select: { id: true, name: true, slug: true },
   });
   if (!project) {
     return { success: false, error: "Project not found" };
@@ -56,7 +56,7 @@ export async function createTask(input: TaskInput): Promise<TaskActionResult> {
     metadata: { title: task.title, projectName: project.name },
   });
 
-  revalidatePath(`/projects/${parsed.data.projectId}`);
+  revalidatePath(`/projects/${project.slug}`);
   revalidatePath("/projects");
   return { success: true };
 }
@@ -71,7 +71,7 @@ export async function updateTask(taskId: string, input: TaskInput): Promise<Task
 
   const project = await prisma.project.findFirst({
     where: { id: parsed.data.projectId, userId },
-    select: { id: true, name: true },
+    select: { id: true, name: true, slug: true },
   });
   if (!project) {
     return { success: false, error: "Project not found" };
@@ -122,7 +122,7 @@ export async function updateTask(taskId: string, input: TaskInput): Promise<Task
     });
   }
 
-  revalidatePath(`/projects/${parsed.data.projectId}`);
+  revalidatePath(`/projects/${project.slug}`);
   revalidatePath("/projects");
   return { success: true };
 }
@@ -135,7 +135,12 @@ export async function updateTaskStatus(
 
   const task = await prisma.task.findFirst({
     where: { id: taskId, userId },
-    select: { projectId: true, status: true, title: true, project: { select: { name: true } } },
+    select: {
+      projectId: true,
+      status: true,
+      title: true,
+      project: { select: { name: true, slug: true } },
+    },
   });
   if (!task) {
     return { success: false, error: "Task not found" };
@@ -159,7 +164,7 @@ export async function updateTaskStatus(
     });
   }
 
-  revalidatePath(`/projects/${task.projectId}`);
+  revalidatePath(`/projects/${task.project.slug}`);
   revalidatePath("/projects");
   return { success: true };
 }
@@ -169,7 +174,7 @@ export async function deleteTask(taskId: string): Promise<TaskActionResult> {
 
   const task = await prisma.task.findFirst({
     where: { id: taskId, userId },
-    select: { projectId: true },
+    select: { project: { select: { slug: true } } },
   });
   if (!task) {
     return { success: false, error: "Task not found" };
@@ -177,7 +182,7 @@ export async function deleteTask(taskId: string): Promise<TaskActionResult> {
 
   await prisma.task.deleteMany({ where: { id: taskId, userId } });
 
-  revalidatePath(`/projects/${task.projectId}`);
+  revalidatePath(`/projects/${task.project.slug}`);
   revalidatePath("/projects");
   return { success: true };
 }
