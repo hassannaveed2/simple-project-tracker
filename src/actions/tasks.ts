@@ -71,10 +71,18 @@ export async function updateTask(taskId: string, input: TaskInput): Promise<Task
 
   const project = await prisma.project.findFirst({
     where: { id: parsed.data.projectId, userId },
-    select: { id: true },
+    select: { id: true, name: true },
   });
   if (!project) {
     return { success: false, error: "Project not found" };
+  }
+
+  const existingTask = await prisma.task.findFirst({
+    where: { id: taskId, userId },
+    select: { status: true, priority: true },
+  });
+  if (!existingTask) {
+    return { success: false, error: "Task not found" };
   }
 
   const result = await prisma.task.updateMany({
@@ -84,6 +92,34 @@ export async function updateTask(taskId: string, input: TaskInput): Promise<Task
 
   if (result.count === 0) {
     return { success: false, error: "Task not found" };
+  }
+
+  const newPriority = parsed.data.priority as TaskPriority;
+  const newStatus = parsed.data.status as TaskStatus;
+
+  if (newPriority !== existingTask.priority) {
+    await logActivity({
+      userId,
+      projectId: parsed.data.projectId,
+      taskId,
+      type: "TASK_PRIORITY_CHANGED",
+      metadata: {
+        title: parsed.data.title,
+        projectName: project.name,
+        from: existingTask.priority,
+        to: newPriority,
+      },
+    });
+  }
+
+  if (newStatus === "COMPLETED" && existingTask.status !== "COMPLETED") {
+    await logActivity({
+      userId,
+      projectId: parsed.data.projectId,
+      taskId,
+      type: "TASK_COMPLETED",
+      metadata: { title: parsed.data.title, projectName: project.name },
+    });
   }
 
   revalidatePath(`/projects/${parsed.data.projectId}`);
