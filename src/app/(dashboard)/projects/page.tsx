@@ -1,10 +1,8 @@
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
-import { computeProjectProgress } from "@/lib/progress";
-import { formatRelativeTime } from "@/lib/format-relative-time";
+import { toProjectCardData } from "@/lib/project-card-data";
 import { NewProjectButton } from "@/components/projects/new-project-button";
-import { ProjectCard, type ProjectCardData } from "@/components/projects/project-card";
-import type { ProjectInput } from "@/lib/validations/project";
+import { ProjectCard } from "@/components/projects/project-card";
 
 export default async function ProjectsPage() {
   // The (dashboard) layout already redirects unauthenticated requests before this page renders,
@@ -30,24 +28,7 @@ export default async function ProjectsPage() {
     );
   }
 
-  const projectCards: ProjectCardData[] = projects.map((project) => {
-    const { completedCount, totalCount, percent } = computeProjectProgress(
-      project.tasks.map((task) => task.status)
-    );
-
-    return {
-      id: project.id,
-      slug: project.slug,
-      name: project.name,
-      description: project.description ?? "",
-      color: project.color as ProjectInput["color"],
-      status: project.status,
-      completedCount,
-      totalCount,
-      percent,
-      updatedAtLabel: formatRelativeTime(project.updatedAt),
-    };
-  });
+  const projectCards = projects.map(toProjectCardData);
 
   return (
     <div className="space-y-6">
