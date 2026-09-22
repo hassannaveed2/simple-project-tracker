@@ -1,13 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { formatDueDate } from "@/lib/format-due-date";
-
-const PRIORITY_LABELS: Record<string, string> = {
-  LOW: "Low",
-  MEDIUM: "Medium",
-  HIGH: "High",
-  URGENT: "Urgent",
-};
+import { PRIORITY_LABELS, PRIORITY_BADGE_CLASSES } from "@/lib/priority-styles";
 
 export type UpcomingTaskData = {
   id: string;
@@ -27,7 +21,12 @@ export function UpcomingTaskRow({ task }: { task: UpcomingTaskData }) {
         <p className="truncate text-xs text-muted-foreground">{task.projectName}</p>
       </div>
       <div className="flex shrink-0 items-center gap-2">
-        <Badge variant="outline">{PRIORITY_LABELS[task.priority]}</Badge>
+        <Badge
+          variant="outline"
+          className={PRIORITY_BADGE_CLASSES[task.priority as keyof typeof PRIORITY_BADGE_CLASSES]}
+        >
+          {PRIORITY_LABELS[task.priority as keyof typeof PRIORITY_LABELS]}
+        </Badge>
         <span
           className={cn(
             "text-xs",

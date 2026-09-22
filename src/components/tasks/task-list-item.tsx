@@ -7,15 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { updateTaskStatus } from "@/actions/tasks";
 import { formatDueDate } from "@/lib/format-due-date";
+import { PRIORITY_LABELS, PRIORITY_BADGE_CLASSES } from "@/lib/priority-styles";
 import { TaskFormSheet } from "./task-form-sheet";
 import type { TaskInput } from "@/lib/validations/task";
-
-const PRIORITY_LABELS: Record<string, string> = {
-  LOW: "Low",
-  MEDIUM: "Medium",
-  HIGH: "High",
-  URGENT: "Urgent",
-};
 
 export type TaskListItemData = TaskInput & { id: string };
 
@@ -82,7 +76,7 @@ export function TaskListItem({
           {task.title}
         </button>
         <div className="flex items-center gap-2">
-          <Badge variant="outline">{PRIORITY_LABELS[task.priority]}</Badge>
+          <Badge variant="outline" className={PRIORITY_BADGE_CLASSES[task.priority]}>{PRIORITY_LABELS[task.priority]}</Badge>
           {dueDateChip}
         </div>
         {editSheet}
@@ -103,7 +97,7 @@ export function TaskListItem({
       >
         {task.title}
       </button>
-      <Badge variant="outline">{PRIORITY_LABELS[task.priority]}</Badge>
+      <Badge variant="outline" className={PRIORITY_BADGE_CLASSES[task.priority]}>{PRIORITY_LABELS[task.priority]}</Badge>
       {dueDateChip}
       {editSheet}
     </div>
