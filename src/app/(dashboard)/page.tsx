@@ -2,15 +2,12 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { getGreeting } from "@/lib/greeting";
 import { toProjectCardData } from "@/lib/project-card-data";
+import { groupTasksByProject } from "@/lib/group-tasks-by-project";
 import { StatCard } from "@/components/dashboard/stat-card";
-import {
-  TodayTasksSection,
-  type TodayTaskGroup,
-} from "@/components/dashboard/today-tasks-section";
+import { TaskGroupList } from "@/components/tasks/task-group-list";
 import { UpcomingTaskRow, type UpcomingTaskData } from "@/components/dashboard/upcoming-task-row";
 import { DashboardCalendar } from "@/components/dashboard/dashboard-calendar";
 import { ProjectCard } from "@/components/projects/project-card";
-import type { TaskListItemData } from "@/components/tasks/task-list-item";
 
 function addDays(date: Date, days: number): Date {
   return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
@@ -79,32 +76,19 @@ export default async function DashboardPage() {
     }),
   ]);
 
-  const todayTaskItems: TaskListItemData[] = todaysTasksRaw.map((task) => ({
-    id: task.id,
-    title: task.title,
-    description: task.description ?? "",
-    notes: task.notes ?? "",
-    projectId: task.projectId,
-    priority: task.priority,
-    status: task.status,
-    dueDate: task.dueDate ? task.dueDate.toISOString().slice(0, 10) : "",
-  }));
-
-  const todayGroupsMap = new Map<string, TodayTaskGroup>();
-  todaysTasksRaw.forEach((task, index) => {
-    const item = todayTaskItems[index];
-    const existing = todayGroupsMap.get(task.projectId);
-    if (existing) {
-      existing.tasks.push(item);
-    } else {
-      todayGroupsMap.set(task.projectId, {
-        projectId: task.projectId,
-        projectName: task.project.name,
-        tasks: [item],
-      });
-    }
-  });
-  const todayGroups = Array.from(todayGroupsMap.values());
+  const todayGroups = groupTasksByProject(
+    todaysTasksRaw.map((task) => ({
+      id: task.id,
+      title: task.title,
+      description: task.description ?? "",
+      notes: task.notes ?? "",
+      projectId: task.projectId,
+      priority: task.priority,
+      status: task.status,
+      dueDate: task.dueDate ? task.dueDate.toISOString().slice(0, 10) : "",
+      projectName: task.project.name,
+    }))
+  );
 
   const windowTaskItems: UpcomingTaskData[] = windowTasksRaw
     .filter((task): task is typeof task & { dueDate: Date } => task.dueDate !== null)
@@ -142,7 +126,11 @@ export default async function DashboardPage() {
         <div className="space-y-8 lg:col-span-2">
           <section className="space-y-3">
             <h2 className="text-lg font-medium">Today&apos;s Tasks</h2>
-            <TodayTasksSection groups={todayGroups} projects={allProjectsForTaskForm} />
+            <TaskGroupList
+              groups={todayGroups}
+              projects={allProjectsForTaskForm}
+              emptyMessage="You don't have any tasks due today."
+            />
           </section>
 
           <section className="space-y-3">

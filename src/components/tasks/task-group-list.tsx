@@ -1,22 +1,17 @@
-import { TaskListItem, type TaskListItemData } from "@/components/tasks/task-list-item";
+import { TaskListItem } from "./task-list-item";
+import type { ProjectTaskGroup } from "@/lib/group-tasks-by-project";
 
-export type TodayTaskGroup = {
-  projectId: string;
-  projectName: string;
-  tasks: TaskListItemData[];
-};
-
-export function TodayTasksSection({
+export function TaskGroupList({
   groups,
   projects,
+  emptyMessage,
 }: {
-  groups: TodayTaskGroup[];
+  groups: ProjectTaskGroup[];
   projects: { id: string; name: string }[];
+  emptyMessage: string;
 }) {
   if (groups.length === 0) {
-    return (
-      <p className="text-sm text-muted-foreground">You don&apos;t have any tasks due today.</p>
-    );
+    return <p className="text-sm text-muted-foreground">{emptyMessage}</p>;
   }
 
   return (
