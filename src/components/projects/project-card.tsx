@@ -26,6 +26,7 @@ const STATUS_LABELS: Record<string, string> = {
 
 export type ProjectCardData = ProjectInput & {
   id: string;
+  slug: string;
   completedCount: number;
   totalCount: number;
   percent: number;
@@ -53,7 +54,7 @@ export function ProjectCard({ project }: { project: ProjectCardData }) {
             className="h-2.5 w-2.5 shrink-0 rounded-full"
             style={{ backgroundColor: project.color }}
           />
-          <Link href={`/projects/${project.id}`} className="font-medium hover:underline">
+          <Link href={`/projects/${project.slug}`} className="font-medium hover:underline">
             {project.name}
           </Link>
         </div>
@@ -65,7 +66,7 @@ export function ProjectCard({ project }: { project: ProjectCardData }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem asChild>
-              <Link href={`/projects/${project.id}`}>Open</Link>
+              <Link href={`/projects/${project.slug}`}>Open</Link>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setEditOpen(true)}>Edit</DropdownMenuItem>
             <DropdownMenuItem onClick={handleArchive}>Archive</DropdownMenuItem>

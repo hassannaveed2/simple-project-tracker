@@ -37,6 +37,7 @@ export default async function ProjectsPage() {
 
     return {
       id: project.id,
+      slug: project.slug,
       name: project.name,
       description: project.description ?? "",
       color: project.color as ProjectInput["color"],
