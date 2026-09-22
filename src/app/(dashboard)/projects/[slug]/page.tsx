@@ -1,28 +1,53 @@
 import { notFound } from "next/navigation";
+import type { TaskStatus, TaskPriority } from "@prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { computeProjectProgress } from "@/lib/progress";
 import { EditProjectButton } from "@/components/projects/edit-project-button";
 import { AddTaskButton } from "@/components/tasks/add-task-button";
 import { KanbanBoard } from "@/components/tasks/kanban-board";
+import { TaskFilters } from "@/components/tasks/task-filters";
 import type { TaskListItemData } from "@/components/tasks/task-list-item";
 import type { ProjectInput } from "@/lib/validations/project";
 
+function startOfUtcDay(date: Date): Date {
+  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+}
+
+function addDays(date: Date, days: number): Date {
+  return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
+}
+
 export default async function ProjectDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ status?: string; priority?: string; due?: string }>;
 }) {
   const { slug } = await params;
+  const { status, priority, due } = await searchParams;
   // The (dashboard) layout already redirects unauthenticated requests before this page renders,
   // so a session is guaranteed here.
   const session = await auth();
   const userId = session!.user.id;
 
+  const now = new Date();
+  const todayStart = startOfUtcDay(now);
+  const todayEnd = addDays(todayStart, 1);
+
   const project = await prisma.project.findFirst({
     where: { slug, userId },
     include: {
       tasks: {
+        where: {
+          ...(status ? { status: status as TaskStatus } : {}),
+          ...(priority ? { priority: priority as TaskPriority } : {}),
+          ...(due === "overdue" ? { dueDate: { lt: todayStart } } : {}),
+          ...(due === "today" ? { dueDate: { gte: todayStart, lt: todayEnd } } : {}),
+          ...(due === "upcoming" ? { dueDate: { gte: todayEnd } } : {}),
+          ...(due === "none" ? { dueDate: null } : {}),
+        },
         orderBy: [{ status: "asc" }, { priority: "desc" }, { dueDate: "asc" }],
       },
     },
@@ -32,14 +57,22 @@ export default async function ProjectDetailPage({
     notFound();
   }
 
-  const allProjects = await prisma.project.findMany({
-    where: { userId },
-    select: { id: true, name: true },
-    orderBy: { name: "asc" },
-  });
+  // Progress must reflect ALL of the project's tasks, never the filtered subset above — fetched
+  // separately so an active filter can never distort the completed/total ratio.
+  const [allProjects, allProjectTaskStatuses] = await Promise.all([
+    prisma.project.findMany({
+      where: { userId },
+      select: { id: true, name: true },
+      orderBy: { name: "asc" },
+    }),
+    prisma.task.findMany({
+      where: { projectId: project.id, userId },
+      select: { status: true },
+    }),
+  ]);
 
   const { completedCount, totalCount, percent } = computeProjectProgress(
-    project.tasks.map((task) => task.status)
+    allProjectTaskStatuses.map((task) => task.status)
   );
 
   const taskItems: TaskListItemData[] = project.tasks.map((task) => ({
@@ -52,6 +85,8 @@ export default async function ProjectDetailPage({
     status: task.status,
     dueDate: task.dueDate ? task.dueDate.toISOString().slice(0, 10) : "",
   }));
+
+  const hasActiveFilters = Boolean(status || priority || due);
 
   return (
     <div className="space-y-6">
@@ -93,11 +128,17 @@ export default async function ProjectDetailPage({
         <AddTaskButton projects={allProjects} defaultProjectId={project.id} />
       </div>
 
-      {taskItems.length === 0 ? (
+      {totalCount > 0 ? <TaskFilters /> : null}
+
+      {totalCount === 0 ? (
         <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
           <p className="text-muted-foreground">No tasks yet.</p>
           <AddTaskButton projects={allProjects} defaultProjectId={project.id} label="Add Task" />
         </div>
+      ) : taskItems.length === 0 ? (
+        <p className="text-sm text-muted-foreground">
+          {hasActiveFilters ? "No tasks match these filters." : "No tasks yet."}
+        </p>
       ) : (
         <KanbanBoard initialTasks={taskItems} projects={allProjects} />
       )}
