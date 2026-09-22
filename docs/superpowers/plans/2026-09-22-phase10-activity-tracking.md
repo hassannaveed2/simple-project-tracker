@@ -18,7 +18,7 @@
 - Create: `src/lib/format-activity-message.ts`
 - Test: `src/lib/format-activity-message.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `src/lib/format-activity-message.test.ts`:
 ```ts
@@ -66,12 +66,12 @@ describe("formatActivityMessage", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module './format-activity-message'`
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `src/lib/format-activity-message.ts`:
 ```ts
@@ -108,12 +108,12 @@ export function formatActivityMessage(activity: ActivityMessageInput): string {
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (4 tests)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/format-activity-message.ts src/lib/format-activity-message.test.ts
@@ -127,7 +127,7 @@ git commit -m "Add formatActivityMessage helper"
 **Files:**
 - Create: `src/actions/activity.ts`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/actions/activity.ts`:
 ```ts
@@ -165,12 +165,12 @@ export async function logActivity(input: LogActivityInput): Promise<void> {
 This is an internal helper called only from other Server Actions (never from a Client Component)
 — it trusts the `userId` its caller already verified via their own `requireUserId()`.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/actions/activity.ts
@@ -184,7 +184,7 @@ git commit -m "Add logActivity server action helper"
 **Files:**
 - Create: `src/components/activity/activity-feed.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/activity/activity-feed.tsx`:
 ```tsx
@@ -219,12 +219,12 @@ export function ActivityFeed({ items }: { items: ActivityFeedItem[] }) {
 No `"use client"` — this component has no interactivity, so it stays a Server Component like the
 rest of this project's read-only display components.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/activity/activity-feed.tsx
@@ -238,7 +238,7 @@ git commit -m "Add ActivityFeed component"
 **Files:**
 - Modify: `src/actions/projects.ts`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 In `src/actions/projects.ts`, add the import and update `createProject` to capture the created
 row and log it:
@@ -293,12 +293,12 @@ export async function createProject(input: ProjectInput): Promise<ProjectActionR
 captures its result as `project` instead of discarding it, and the `logActivity` call is new.
 `updateProject`, `archiveProject`, and `deleteProject` are unchanged.)
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/actions/projects.ts
@@ -312,7 +312,7 @@ git commit -m "Log PROJECT_CREATED activity from createProject"
 **Files:**
 - Modify: `src/actions/tasks.ts`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 In `src/actions/tasks.ts`, add the import and update `createTask`:
 
@@ -358,12 +358,12 @@ export async function createTask(input: TaskInput): Promise<TaskActionResult> {
 (Changes: the project existence check's `select` gains `name`; `prisma.task.create(...)`'s result
 is now captured as `task`; the `logActivity` call is new.)
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/actions/tasks.ts
@@ -377,7 +377,7 @@ git commit -m "Log TASK_CREATED activity from createTask"
 **Files:**
 - Modify: `src/actions/tasks.ts`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 Update `updateTaskStatus` in `src/actions/tasks.ts`:
 
@@ -424,12 +424,12 @@ export async function updateTaskStatus(
 and the project's `name`; the logging happens only on a genuine not-already-completed →
 completed transition, after the update succeeds.)
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/actions/tasks.ts
@@ -443,7 +443,7 @@ git commit -m "Log TASK_COMPLETED activity from updateTaskStatus"
 **Files:**
 - Modify: `src/actions/tasks.ts`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 Update `updateTask` in `src/actions/tasks.ts`:
 
@@ -527,12 +527,12 @@ Notes on this diff:
 - Both activity types can fire from a single save (e.g. changing priority and marking complete in
   the same edit).
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/actions/tasks.ts
@@ -546,7 +546,7 @@ git commit -m "Log TASK_PRIORITY_CHANGED and TASK_COMPLETED activity from update
 **Files:**
 - Modify: `src/app/(dashboard)/projects/[slug]/page.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 Add the imports:
 ```ts
@@ -593,12 +593,12 @@ Finally, add a new section at the end of the returned JSX, after the closing of 
       </section>
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add "src/app/(dashboard)/projects/[slug]/page.tsx"
@@ -612,7 +612,7 @@ git commit -m "Show project activity feed on Project Detail page"
 **Files:**
 - Modify: `src/app/(dashboard)/page.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 Add the imports:
 ```ts
@@ -666,12 +666,12 @@ with:
         </div>
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add "src/app/(dashboard)/page.tsx"
@@ -684,7 +684,7 @@ git commit -m "Show Recent Activity widget on Dashboard"
 
 **Files:** none (verification only)
 
-- [ ] **Step 1: Automated checks**
+- [x] **Step 1: Automated checks**
 
 Run, in order:
 ```bash
@@ -695,7 +695,7 @@ npm run build
 ```
 Expected: all pass with no errors.
 
-- [ ] **Step 2: Manual browser walkthrough**
+- [x] **Step 2: Manual browser walkthrough**
 
 Start the dev server (`npm run dev`) and, logged in as `demo@example.com` / `password123`:
 
@@ -722,20 +722,20 @@ Start the dev server (`npm run dev`) and, logged in as `demo@example.com` / `pas
    Test Project"" entry appears on the Dashboard's Recent Activity widget.
 8. Check the browser console for errors throughout — expect none.
 
-- [ ] **Step 3: Clean up test data**
+- [x] **Step 3: Clean up test data**
 
 Delete "Activity test task" (via its edit sheet's Delete button) and delete "Activity Test
 Project" (via its project card's actions menu), so the seed data returns to its Phase 8/9
 verification state. Note: deleting them will also cascade-delete their own activity rows (by
 design, per the spec's cascade-delete discussion) — this is expected and fine.
 
-- [ ] **Step 4: Mark this plan's checkboxes complete**
+- [x] **Step 4: Mark this plan's checkboxes complete**
 
 ```bash
 sed -i 's/^- \[ \]/- [x]/' docs/superpowers/plans/2026-09-22-phase10-activity-tracking.md
 ```
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add docs/superpowers/plans/2026-09-22-phase10-activity-tracking.md
