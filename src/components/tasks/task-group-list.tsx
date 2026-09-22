@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+import { PROJECT_COLOR_ACCENT_CLASSES } from "@/lib/project-color-styles";
 import { TaskListItem } from "./task-list-item";
 import type { ProjectTaskGroup } from "@/lib/group-tasks-by-project";
 
@@ -17,7 +19,15 @@ export function TaskGroupList({
   return (
     <div className="space-y-4">
       {groups.map((group) => (
-        <div key={group.projectId} className="space-y-2">
+        <div
+          key={group.projectId}
+          className={cn(
+            "space-y-2 border-l-4 pl-3",
+            PROJECT_COLOR_ACCENT_CLASSES[
+              group.projectColor as keyof typeof PROJECT_COLOR_ACCENT_CLASSES
+            ]
+          )}
+        >
           <h3 className="text-sm font-medium text-muted-foreground">{group.projectName}</h3>
           <div className="space-y-2">
             {group.tasks.map((task) => (
