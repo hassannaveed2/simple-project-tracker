@@ -16,10 +16,12 @@ export function KanbanColumn({
   status,
   tasks,
   projects,
+  projectColor,
 }: {
   status: (typeof TASK_STATUSES)[number];
   tasks: TaskListItemData[];
   projects: { id: string; name: string }[];
+  projectColor: string;
 }) {
   const { setNodeRef, isOver } = useDroppable({ id: status });
 
@@ -37,7 +39,7 @@ export function KanbanColumn({
       </div>
       <div className="flex flex-col gap-2">
         {tasks.map((task) => (
-          <KanbanCard key={task.id} task={task} projects={projects} />
+          <KanbanCard key={task.id} task={task} projects={projects} projectColor={projectColor} />
         ))}
       </div>
     </div>

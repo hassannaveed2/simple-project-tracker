@@ -6,9 +6,11 @@ import { TaskListItem, type TaskListItemData } from "./task-list-item";
 export function KanbanCard({
   task,
   projects,
+  projectColor,
 }: {
   task: TaskListItemData;
   projects: { id: string; name: string }[];
+  projectColor: string;
 }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: task.id,
@@ -26,7 +28,7 @@ export function KanbanCard({
       {...listeners}
       className={isDragging ? "opacity-50" : undefined}
     >
-      <TaskListItem task={task} projects={projects} variant="card" />
+      <TaskListItem task={task} projects={projects} variant="card" projectColor={projectColor} />
     </div>
   );
 }

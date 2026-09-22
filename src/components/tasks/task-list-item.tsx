@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { updateTaskStatus } from "@/actions/tasks";
 import { formatDueDate } from "@/lib/format-due-date";
 import { PRIORITY_LABELS, PRIORITY_BADGE_CLASSES } from "@/lib/priority-styles";
+import { PROJECT_COLOR_CARD_CLASSES } from "@/lib/project-color-styles";
 import { TaskFormSheet } from "./task-form-sheet";
 import type { TaskInput } from "@/lib/validations/task";
 
@@ -17,10 +18,12 @@ export function TaskListItem({
   task,
   projects,
   variant = "row",
+  projectColor,
 }: {
   task: TaskListItemData;
   projects: { id: string; name: string }[];
   variant?: "row" | "card";
+  projectColor?: string;
 }) {
   const [editOpen, setEditOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -64,7 +67,14 @@ export function TaskListItem({
 
   if (variant === "card") {
     return (
-      <div className="flex flex-col gap-2 rounded-lg border bg-background p-3">
+      <div
+        className={cn(
+          "flex flex-col gap-2 rounded-lg border p-3",
+          projectColor
+            ? PROJECT_COLOR_CARD_CLASSES[projectColor as keyof typeof PROJECT_COLOR_CARD_CLASSES]
+            : "bg-background"
+        )}
+      >
         <button
           type="button"
           onClick={() => setEditOpen(true)}

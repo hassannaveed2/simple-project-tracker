@@ -18,9 +18,11 @@ import type { TaskListItemData } from "./task-list-item";
 export function KanbanBoard({
   initialTasks,
   projects,
+  projectColor,
 }: {
   initialTasks: TaskListItemData[];
   projects: { id: string; name: string }[];
+  projectColor: string;
 }) {
   const [tasks, setTasks] = useState(initialTasks);
 
@@ -64,6 +66,7 @@ export function KanbanBoard({
             status={status}
             tasks={tasks.filter((t) => t.status === status)}
             projects={projects}
+            projectColor={projectColor}
           />
         ))}
       </div>
