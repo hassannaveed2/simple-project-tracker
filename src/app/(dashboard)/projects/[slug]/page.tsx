@@ -9,6 +9,7 @@ import { KanbanBoard } from "@/components/tasks/kanban-board";
 import { TaskFilters } from "@/components/tasks/task-filters";
 import { ActivityFeed, type ActivityFeedItem } from "@/components/activity/activity-feed";
 import { formatActivityMessage, type ActivityMessageInput } from "@/lib/format-activity-message";
+import { PROJECT_COLOR_HEADER_CLASSES } from "@/lib/project-color-styles";
 import type { TaskListItemData } from "@/components/tasks/task-list-item";
 import type { ProjectInput } from "@/lib/validations/project";
 
@@ -106,7 +107,13 @@ export default async function ProjectDetailPage({
 
   return (
     <div className="space-y-6">
-      <div className="space-y-3">
+      <div
+        className={`space-y-3 rounded-lg p-4 ${
+          PROJECT_COLOR_HEADER_CLASSES[
+            project.color as keyof typeof PROJECT_COLOR_HEADER_CLASSES
+          ]
+        }`}
+      >
         <div className="flex items-start justify-between gap-2">
           <div>
             <h1 className="text-2xl font-semibold">{project.name}</h1>
@@ -156,7 +163,7 @@ export default async function ProjectDetailPage({
           {hasActiveFilters ? "No tasks match these filters." : "No tasks yet."}
         </p>
       ) : (
-        <KanbanBoard initialTasks={taskItems} projects={allProjects} />
+        <KanbanBoard initialTasks={taskItems} projects={allProjects} projectColor={project.color} />
       )}
 
       <section className="space-y-3">
