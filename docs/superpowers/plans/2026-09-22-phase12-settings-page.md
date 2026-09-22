@@ -18,7 +18,7 @@
 - Create: `src/lib/validations/settings.ts`
 - Test: `src/lib/validations/settings.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `src/lib/validations/settings.test.ts`:
 ```ts
@@ -78,12 +78,12 @@ describe("passwordSchema", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module './settings'`
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `src/lib/validations/settings.ts`:
 ```ts
@@ -108,12 +108,12 @@ export type ProfileInput = z.infer<typeof profileSchema>;
 export type PasswordInput = z.infer<typeof passwordSchema>;
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (7 tests)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/validations/settings.ts src/lib/validations/settings.test.ts
@@ -127,7 +127,7 @@ git commit -m "Add settings validation schemas"
 **Files:**
 - Create: `src/actions/settings.ts`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/actions/settings.ts`:
 ```ts
@@ -212,12 +212,12 @@ Notes:
 - `deleteAccount`'s `prisma.user.delete` cascades to that user's Projects, Tasks, and Activity via
   the `onDelete: Cascade` foreign keys already in the schema — no manual cleanup needed.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/actions/settings.ts
@@ -231,7 +231,7 @@ git commit -m "Add settings server actions"
 **Files:**
 - Create: `src/components/settings/profile-form.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/settings/profile-form.tsx`:
 ```tsx
@@ -297,12 +297,12 @@ export function ProfileForm({ name, email }: { name: string; email: string }) {
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/settings/profile-form.tsx
@@ -316,7 +316,7 @@ git commit -m "Add ProfileForm component"
 **Files:**
 - Create: `src/components/settings/theme-select.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/settings/theme-select.tsx`:
 ```tsx
@@ -357,12 +357,12 @@ export function ThemeSelect() {
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/settings/theme-select.tsx
@@ -376,7 +376,7 @@ git commit -m "Add ThemeSelect component"
 **Files:**
 - Create: `src/components/settings/password-form.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/settings/password-form.tsx`:
 ```tsx
@@ -465,12 +465,12 @@ export function PasswordForm() {
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/settings/password-form.tsx
@@ -484,7 +484,7 @@ git commit -m "Add PasswordForm component"
 **Files:**
 - Create: `src/components/settings/logout-button.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/settings/logout-button.tsx`:
 ```tsx
@@ -505,12 +505,12 @@ export function LogoutButton() {
 No `"use client"` — a plain `<form action={serverAction}>` works from a Server Component; there's
 no client-side state here at all.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/settings/logout-button.tsx
@@ -524,7 +524,7 @@ git commit -m "Add LogoutButton component"
 **Files:**
 - Create: `src/components/settings/export-data-button.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/settings/export-data-button.tsx`:
 ```tsx
@@ -564,12 +564,12 @@ export function ExportDataButton() {
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/settings/export-data-button.tsx
@@ -583,7 +583,7 @@ git commit -m "Add ExportDataButton component"
 **Files:**
 - Create: `src/components/settings/delete-account-dialog.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/settings/delete-account-dialog.tsx`:
 ```tsx
@@ -640,12 +640,12 @@ client-side confirm actions that close the dialog — here, `deleteAccount` ends
 navigates away itself (via `signOut({ redirectTo })`), so no separate close-the-dialog step is
 needed on success.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/settings/delete-account-dialog.tsx
@@ -659,7 +659,7 @@ git commit -m "Add DeleteAccountDialog component"
 **Files:**
 - Modify: `src/app/(dashboard)/settings/page.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 Replace the full contents of `src/app/(dashboard)/settings/page.tsx`:
 
@@ -718,12 +718,12 @@ export default async function SettingsPage() {
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add "src/app/(dashboard)/settings/page.tsx"
@@ -736,7 +736,7 @@ git commit -m "Assemble Settings page from Profile/Theme/Account/Data sections"
 
 **Files:** none (verification only)
 
-- [ ] **Step 1: Automated checks**
+- [x] **Step 1: Automated checks**
 
 Run, in order:
 ```bash
@@ -747,7 +747,7 @@ npm run build
 ```
 Expected: all pass with no errors.
 
-- [ ] **Step 2: Manual browser walkthrough**
+- [x] **Step 2: Manual browser walkthrough**
 
 Start the dev server (`npm run dev`) and, logged in as `demo@example.com` / `password123`:
 
@@ -777,13 +777,13 @@ Start the dev server (`npm run dev`) and, logged in as `demo@example.com` / `pas
     credentials fails (account is gone).
 11. Check the browser console for errors throughout — expect none.
 
-- [ ] **Step 3: Mark this plan's checkboxes complete**
+- [x] **Step 3: Mark this plan's checkboxes complete**
 
 ```bash
 sed -i 's/^- \[ \]/- [x]/' docs/superpowers/plans/2026-09-22-phase12-settings-page.md
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add docs/superpowers/plans/2026-09-22-phase12-settings-page.md
