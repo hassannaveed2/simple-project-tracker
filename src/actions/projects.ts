@@ -5,6 +5,7 @@ import type { ProjectStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { projectSchema, type ProjectInput } from "@/lib/validations/project";
+import { slugify, ensureUniqueSlug } from "@/lib/slugify";
 
 export type ProjectActionResult = { success: true } | { success: false; error: string };
 
@@ -21,9 +22,21 @@ export async function createProject(input: ProjectInput): Promise<ProjectActionR
   }
 
   const userId = await requireUserId();
+
+  const baseSlug = slugify(parsed.data.name);
+  const existingProjects = await prisma.project.findMany({
+    where: { userId, slug: { startsWith: baseSlug } },
+    select: { slug: true },
+  });
+  const slug = ensureUniqueSlug(
+    baseSlug,
+    existingProjects.map((project) => project.slug)
+  );
+
   await prisma.project.create({
     data: {
       userId,
+      slug,
       name: parsed.data.name,
       description: parsed.data.description || null,
       color: parsed.data.color,
