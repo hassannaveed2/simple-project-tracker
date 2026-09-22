@@ -70,20 +70,17 @@ export function TaskListItem({
   if (variant === "card") {
     return (
       <div className="flex flex-col gap-2 rounded-lg border bg-background p-3">
-        <div className="flex items-start gap-2">
-          <Checkbox checked={isCompleted} disabled={isPending} onCheckedChange={handleToggle} />
-          <button
-            type="button"
-            onClick={() => setEditOpen(true)}
-            className={cn(
-              "flex-1 text-left text-sm",
-              isCompleted && "text-muted-foreground line-through"
-            )}
-          >
-            {task.title}
-          </button>
-        </div>
-        <div className="flex items-center gap-2 pl-6">
+        <button
+          type="button"
+          onClick={() => setEditOpen(true)}
+          className={cn(
+            "text-left text-sm",
+            isCompleted && "text-muted-foreground line-through"
+          )}
+        >
+          {task.title}
+        </button>
+        <div className="flex items-center gap-2">
           <Badge variant="outline">{PRIORITY_LABELS[task.priority]}</Badge>
           {dueDateChip}
         </div>
