@@ -117,28 +117,27 @@ Demo login after seeding: `demo@example.com` / `password123`.
 
 ### Neon connectivity on this machine
 
-This machine's IPv6 default route is stale/non-functional (a router-advertised link-local gateway
-that doesn't actually forward packets), but `getaddrinfo` still returns IPv6 addresses first for
-Neon's hostname, so any raw TCP connection (Prisma, `pg`, etc.) hangs until timeout. Confirmed via
-`getent hosts <host>` (IPv6-only) vs `getent ahostsv4 <host>` (real IPv4s exist) plus raw
-`/dev/tcp` connect tests — IPv4 itself works fine.
+Earlier in this project, this machine's IPv6 default route appeared stale/non-functional (a
+router-advertised link-local gateway that didn't forward packets), and `getaddrinfo` returned
+IPv6 addresses first for Neon's hostname, so raw TCP connections (Prisma, `pg`, etc.) hung until
+timeout. The workaround at the time was connecting via Neon's IPv4 address directly plus an
+`options=endpoint=<id>` connection parameter (Neon's documented mechanism for clients that can't
+rely on SNI-based routing), kept entirely inside `.env`.
 
-Fix used (kept entirely inside `.env`, no system files touched): connect via the IPv4 address
-directly and pass Neon's endpoint ID as a connection option, which is Neon's documented mechanism
-for clients that can't rely on SNI-based routing (normally the hostname implies which backend to
-route to via SNI; connecting by bare IP has no hostname/SNI to route on):
+**As of 2026-09-22, this is no longer needed** — re-tested via `getent hosts <host>` (still
+resolves IPv6 first), raw `/dev/tcp` connects to both the hostname and an explicit IPv6 address,
+and a full `npx prisma db execute` round trip, all of which succeeded over IPv6 without the
+workaround. `.env` now uses Neon's plain pooled/direct hostnames directly
+(`<endpoint>-pooler.<region>.aws.neon.tech` / `<endpoint>.<region>.aws.neon.tech`), matching
+`.env.example`. The router/network condition apparently changed since the original diagnosis;
+`ping6` to Neon's IPv6 addresses still fails, but that's ICMP being filtered somewhere on the
+path, not a routing problem — real TCP traffic on port 5432 goes through fine.
 
-```
-postgresql://<user>:<password>@<ipv4>:5432/<db>?sslmode=require&options=endpoint%3D<endpoint-id>
-```
-
-`<endpoint-id>` is the `ep-...` segment of the original hostname — include the `-pooler` suffix
-for `DATABASE_URL` (pooled), omit it for `DIRECT_URL`. Both hostnames resolve to the same IPv4
-proxy addresses; routing happens via this parameter, not the IP itself.
-
-If this ever stops connecting, re-run `getent ahostsv4 <original-neon-hostname>` — Neon's proxy
-IPs aren't guaranteed permanent — and update `.env` with the new address. See `.env.example` for
-the full recipe.
+If connections start hanging again, re-run the same diagnostic: `getent hosts <host>` (IPv6) vs
+`getent ahostsv4 <host>` (IPv4) plus a raw `/dev/tcp` connect test on each, to confirm whether
+IPv6 has actually broken again before falling back to the IPv4+`options=endpoint=` workaround
+described in this project's git history (`git log -p -- .env.example`) or `.env.example`'s
+comments.
 
 ### `migrate dev` refuses to run non-interactively for risky changes
 
