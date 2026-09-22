@@ -1,5 +1,6 @@
 import { PrismaClient, TaskPriority, TaskStatus, ProjectStatus } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { slugify } from "../src/lib/slugify";
 
 const prisma = new PrismaClient();
 
@@ -19,6 +20,7 @@ async function main() {
   const clientWebsite = await prisma.project.create({
     data: {
       userId: user.id,
+      slug: slugify("Client Website"),
       name: "Client Website",
       description: "Marketing site redesign for a client.",
       color: "#6366f1",
@@ -59,6 +61,7 @@ async function main() {
   const personalWebsite = await prisma.project.create({
     data: {
       userId: user.id,
+      slug: slugify("Personal Website"),
       name: "Personal Website",
       description: "Portfolio and blog.",
       color: "#22c55e",
