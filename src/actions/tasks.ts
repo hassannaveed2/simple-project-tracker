@@ -5,6 +5,7 @@ import type { TaskPriority, TaskStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { taskSchema, type TaskInput } from "@/lib/validations/task";
+import { logActivity } from "./activity";
 
 export type TaskActionResult = { success: true } | { success: false; error: string };
 
@@ -39,13 +40,21 @@ export async function createTask(input: TaskInput): Promise<TaskActionResult> {
   // against this user's projects before we attach a task to it.
   const project = await prisma.project.findFirst({
     where: { id: parsed.data.projectId, userId },
-    select: { id: true },
+    select: { id: true, name: true },
   });
   if (!project) {
     return { success: false, error: "Project not found" };
   }
 
-  await prisma.task.create({ data: toTaskData(userId, parsed.data) });
+  const task = await prisma.task.create({ data: toTaskData(userId, parsed.data) });
+
+  await logActivity({
+    userId,
+    projectId: task.projectId,
+    taskId: task.id,
+    type: "TASK_CREATED",
+    metadata: { title: task.title, projectName: project.name },
+  });
 
   revalidatePath(`/projects/${parsed.data.projectId}`);
   revalidatePath("/projects");
