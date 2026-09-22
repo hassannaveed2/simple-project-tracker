@@ -139,3 +139,25 @@ proxy addresses; routing happens via this parameter, not the IP itself.
 If this ever stops connecting, re-run `getent ahostsv4 <original-neon-hostname>` — Neon's proxy
 IPs aren't guaranteed permanent — and update `.env` with the new address. See `.env.example` for
 the full recipe.
+
+### `migrate dev` refuses to run non-interactively for risky changes
+
+`prisma migrate dev` (even with `--create-only`) hard-refuses in a non-interactive shell as soon as
+it needs to show a confirmation prompt — e.g. adding a unique constraint that *could* fail against
+existing duplicate data (`Error: Prisma Migrate has detected that the environment is
+non-interactive`). Work around it without ever touching `migrate dev`'s interactive path:
+
+1. Generate the raw SQL yourself: `npx prisma migrate diff --from-migrations prisma/migrations --to-schema-datamodel prisma/schema.prisma --shadow-database-url "$DIRECT_URL" --script`
+2. Write that output into a new `prisma/migrations/<timestamp>_<name>/migration.sql` by hand
+3. Apply it with `npx prisma migrate deploy` — `deploy` never prompts, by design (it's meant for
+   CI/non-interactive use)
+
+Separately: on this project, `_prisma_migrations` (Prisma's own bookkeeping table) has been
+observed to go missing from the database even after a `migrate deploy` reported success — the
+actual schema changes persist, but the tracking table doesn't, so a later `migrate deploy` fails
+with `P3005: The database schema is not empty`. If that happens and you've confirmed (via
+`information_schema.columns`/`pg_indexes`) that earlier migrations' effects are genuinely already
+present: baseline them with `npx prisma migrate resolve --applied <migration_name>` for each
+already-applied one (oldest first — this recreates `_prisma_migrations` and marks them done
+without re-running their SQL), then run `npx prisma migrate deploy` again to actually execute
+whichever migration is still genuinely pending.
