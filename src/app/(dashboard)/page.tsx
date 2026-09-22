@@ -134,10 +134,10 @@ export default async function DashboardPage() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <StatCard label="Total Projects" value={totalProjects} />
-        <StatCard label="Active Tasks" value={activeTasks} />
-        <StatCard label="Due Today" value={dueTodayCount} />
-        <StatCard label="Completed This Week" value={completedThisWeek} />
+        <StatCard label="Total Projects" value={totalProjects} color="#6366f1" />
+        <StatCard label="Active Tasks" value={activeTasks} color="#0ea5e9" />
+        <StatCard label="Due Today" value={dueTodayCount} color="#f97316" />
+        <StatCard label="Completed This Week" value={completedThisWeek} color="#22c55e" />
       </div>
 
       <div className="grid gap-8 lg:grid-cols-3">
