@@ -17,21 +17,21 @@
 **Files:**
 - Create: `src/components/ui/command.tsx` (and any dependency it pulls in, e.g. `dialog.tsx`, via the CLI)
 
-- [ ] **Step 1: Run the shadcn CLI**
+- [x] **Step 1: Run the shadcn CLI**
 
 Run: `npx shadcn@3.8.5 add command`
 
-- [ ] **Step 2: Verify the file was added**
+- [x] **Step 2: Verify the file was added**
 
 Run: `ls src/components/ui/command.tsx`
 Expected: file exists.
 
-- [ ] **Step 3: Verify the project still builds**
+- [x] **Step 3: Verify the project still builds**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add -A
@@ -45,7 +45,7 @@ git commit -m "Add shadcn command component"
 **Files:**
 - Create: `src/actions/search.ts`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/actions/search.ts`:
 ```ts
@@ -100,12 +100,12 @@ export async function search(query: string): Promise<SearchResult> {
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/actions/search.ts
@@ -119,7 +119,7 @@ git commit -m "Add global search server action"
 **Files:**
 - Create: `src/components/search/search-palette.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/search/search-palette.tsx`:
 ```tsx
@@ -252,12 +252,12 @@ export function SearchPalette() {
 
 Note: `CommandItem`'s `value` is set to `"<title>-<id>"` rather than the bare title. cmdk requires unique `value`s per item (two tasks can share a title) and uses that same string for its own built-in fuzzy filter — appending the id keeps values unique while leaving the title as the leading, matched portion, so cmdk's filter still matches whatever the user typed (which is also what the server already matched on).
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/search/search-palette.tsx
@@ -271,7 +271,7 @@ git commit -m "Add SearchPalette command component"
 **Files:**
 - Modify: `src/components/layout/sidebar.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 Add the import and render `<SearchPalette />` above the main nav list, inside `src/components/layout/sidebar.tsx`. The `Sidebar` component is rendered by the `(dashboard)` layout on every authenticated page and stays mounted (just CSS-hidden below the `md` breakpoint via its `hidden md:flex` classes), so `SearchPalette`'s `Ctrl+K` listener is effectively global across the app; the visible trigger button is desktop-only for now, matching this component's own visibility.
 
@@ -327,12 +327,12 @@ function SidebarLink({ item, active }: { item: NavItem; active: boolean }) {
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/layout/sidebar.tsx
@@ -346,7 +346,7 @@ git commit -m "Mount SearchPalette in the sidebar"
 **Files:**
 - Create: `src/components/tasks/task-filters.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/tasks/task-filters.tsx`:
 ```tsx
@@ -451,12 +451,12 @@ export function TaskFilters() {
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/tasks/task-filters.tsx
@@ -470,7 +470,7 @@ git commit -m "Add TaskFilters component"
 **Files:**
 - Modify: `src/app/(dashboard)/projects/[slug]/page.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 Replace the full contents of `src/app/(dashboard)/projects/[slug]/page.tsx`:
 
@@ -624,12 +624,12 @@ export default async function ProjectDetailPage({
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add "src/app/(dashboard)/projects/[slug]/page.tsx"
@@ -642,7 +642,7 @@ git commit -m "Add Status/Priority/Due-date filters to Project Detail page"
 
 **Files:** none (verification only)
 
-- [ ] **Step 1: Automated checks**
+- [x] **Step 1: Automated checks**
 
 Run, in order:
 ```bash
@@ -653,7 +653,7 @@ npm run build
 ```
 Expected: all pass with no errors.
 
-- [ ] **Step 2: Manual browser walkthrough**
+- [x] **Step 2: Manual browser walkthrough**
 
 Start the dev server (`npm run dev`) and, logged in as `demo@example.com` / `password123`:
 
@@ -671,13 +671,13 @@ Start the dev server (`npm run dev`) and, logged in as `demo@example.com` / `pas
 12. Clear all filters — confirm the full task list and Kanban board return.
 13. Check the browser console for errors throughout — expect none (aside from any pre-existing, unrelated intermittent dev-mode hydration warning already documented from Phase 8 verification).
 
-- [ ] **Step 3: Mark this plan's checkboxes complete**
+- [x] **Step 3: Mark this plan's checkboxes complete**
 
 ```bash
 sed -i 's/^- \[ \]/- [x]/' docs/superpowers/plans/2026-09-22-phase9-search-filters.md
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add docs/superpowers/plans/2026-09-22-phase9-search-filters.md
