@@ -18,7 +18,7 @@
 - Create: `src/lib/group-tasks-by-project.ts`
 - Test: `src/lib/group-tasks-by-project.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `src/lib/group-tasks-by-project.test.ts`:
 ```ts
@@ -69,12 +69,12 @@ describe("groupTasksByProject", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module './group-tasks-by-project'`
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `src/lib/group-tasks-by-project.ts`:
 ```ts
@@ -106,12 +106,12 @@ export function groupTasksByProject(
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (3 tests)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/group-tasks-by-project.ts src/lib/group-tasks-by-project.test.ts
@@ -130,7 +130,7 @@ git commit -m "Add groupTasksByProject helper"
 This is a refactor — the Dashboard's Today's Tasks section should render identically to how
 Phase 7 shipped it, just built on the newly-shared helper/component instead of one-off code.
 
-- [ ] **Step 1: Create the generalized component**
+- [x] **Step 1: Create the generalized component**
 
 `src/components/tasks/task-group-list.tsx`:
 ```tsx
@@ -167,13 +167,13 @@ export function TaskGroupList({
 }
 ```
 
-- [ ] **Step 2: Delete the old Dashboard-specific component**
+- [x] **Step 2: Delete the old Dashboard-specific component**
 
 ```bash
 rm src/components/dashboard/today-tasks-section.tsx
 ```
 
-- [ ] **Step 3: Update the Dashboard page to use the shared helper and component**
+- [x] **Step 3: Update the Dashboard page to use the shared helper and component**
 
 Replace the full contents of `src/app/(dashboard)/page.tsx`:
 
@@ -352,13 +352,13 @@ export default async function DashboardPage() {
 }
 ```
 
-- [ ] **Step 4: Verify**
+- [x] **Step 4: Verify**
 
 Run: `npm run build`
 Expected: build succeeds. `/` should render exactly as it did after Phase 7 — this task changes
 no behavior, only where the grouping logic lives.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/tasks/task-group-list.tsx src/components/dashboard/today-tasks-section.tsx "src/app/(dashboard)/page.tsx"
@@ -373,7 +373,7 @@ git commit -m "Generalize TaskGroupList and adopt groupTasksByProject on the Das
 - Create: `src/lib/group-tasks-by-due-date.ts`
 - Test: `src/lib/group-tasks-by-due-date.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `src/lib/group-tasks-by-due-date.test.ts`:
 ```ts
@@ -427,12 +427,12 @@ describe("groupTasksByDueDate", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module './group-tasks-by-due-date'`
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `src/lib/group-tasks-by-due-date.ts`:
 ```ts
@@ -470,12 +470,12 @@ only ever shows tasks due strictly after today (Task 5's query enforces that), s
 can only return `"Tomorrow"` or a short date like `"Sep 26"` here — never `"Today"`/`"Overdue"` —
 which is exactly the header format the spec's own `/upcoming` example uses.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (3 tests)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/group-tasks-by-due-date.ts src/lib/group-tasks-by-due-date.test.ts
@@ -489,7 +489,7 @@ git commit -m "Add groupTasksByDueDate helper"
 **Files:**
 - Modify: `src/app/(dashboard)/today/page.tsx`
 
-- [ ] **Step 1: Replace the placeholder**
+- [x] **Step 1: Replace the placeholder**
 
 Replace the full contents of `src/app/(dashboard)/today/page.tsx`:
 
@@ -593,12 +593,12 @@ export default async function TodayPage() {
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npm run build`
 Expected: build succeeds.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add "src/app/(dashboard)/today/page.tsx"
@@ -612,7 +612,7 @@ git commit -m "Build the /today page"
 **Files:**
 - Modify: `src/app/(dashboard)/upcoming/page.tsx`
 
-- [ ] **Step 1: Replace the placeholder**
+- [x] **Step 1: Replace the placeholder**
 
 Replace the full contents of `src/app/(dashboard)/upcoming/page.tsx`:
 
@@ -692,12 +692,12 @@ Rows deliberately don't show project name, matching the spec's own `/upcoming` e
 titles listed plainly under each date heading, no project mentioned) — unlike `/today`, which the
 spec explicitly groups by project.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npm run build`
 Expected: build succeeds.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add "src/app/(dashboard)/upcoming/page.tsx"
@@ -711,7 +711,7 @@ git commit -m "Build the /upcoming page"
 **Files:**
 - Create: `src/components/completed/completed-filters.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/completed/completed-filters.tsx`:
 ```tsx
@@ -803,12 +803,12 @@ export function CompletedFilters({ projects }: { projects: { id: string; name: s
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/completed/completed-filters.tsx
@@ -822,7 +822,7 @@ git commit -m "Add completed page filter bar"
 **Files:**
 - Modify: `src/app/(dashboard)/completed/page.tsx`
 
-- [ ] **Step 1: Replace the placeholder**
+- [x] **Step 1: Replace the placeholder**
 
 Replace the full contents of `src/app/(dashboard)/completed/page.tsx`:
 
@@ -899,7 +899,7 @@ Unchecking a task's checkbox here calls the same `updateTaskStatus` `TaskListIte
 everywhere else, flipping it back to `TODO` — on a page that only shows completed tasks, that
 action *is* "restore a completed task." No new Server Action needed.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npm run build`
 Expected: build succeeds. If Next.js's build complains about `useSearchParams` needing a
@@ -907,7 +907,7 @@ Expected: build succeeds. If Next.js's build complains about `useSearchParams` n
 try without it first, since this page is already fully dynamic (it calls `auth()`), which usually
 avoids that requirement.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add "src/app/(dashboard)/completed/page.tsx"
@@ -918,7 +918,7 @@ git commit -m "Build the /completed page"
 
 ### Task 8: Final verification
 
-- [ ] **Step 1: Automated checks**
+- [x] **Step 1: Automated checks**
 
 ```bash
 npm run lint
@@ -929,7 +929,7 @@ npm run build
 
 Expected: all four succeed with no errors.
 
-- [ ] **Step 2: Manual browser walkthrough**
+- [x] **Step 2: Manual browser walkthrough**
 
 `npm run dev`, log in as the seeded demo user:
 
@@ -950,11 +950,11 @@ Expected: all four succeed with no errors.
    the refactor in Task 2 should be invisible behaviorally
 6. Check the browser console for errors throughout — expect none
 
-- [ ] **Step 3: Clean up test data**
+- [x] **Step 3: Clean up test data**
 
 Re-complete "Deploy to staging" (toggle its checkbox again) to restore the seed fixture to its
 original state, and delete any test task added in Step 2 for the `/upcoming` check.
 
-- [ ] **Step 4: Update plan status**
+- [x] **Step 4: Update plan status**
 
 Mark all checkboxes in this plan complete once every step above has actually passed.
