@@ -17,18 +17,18 @@
 **Files:**
 - Modify: `package.json`, `package-lock.json`
 
-- [ ] **Step 1: Install**
+- [x] **Step 1: Install**
 
 ```bash
 npm install @dnd-kit/core
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors (nothing imports it yet, but confirms the install didn't break anything).
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add package.json package-lock.json
@@ -46,7 +46,7 @@ This is Phase 3's existing file — the current row layout becomes the default (
 a new `variant="card"` branch is added for the Kanban board. No existing behavior changes for
 current callers (none pass `variant`, so they keep getting the row layout).
 
-- [ ] **Step 1: Add the variant prop and card layout**
+- [x] **Step 1: Add the variant prop and card layout**
 
 Replace the full contents of `src/components/tasks/task-list-item.tsx`:
 
@@ -166,12 +166,12 @@ export function TaskListItem({
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/tasks/task-list-item.tsx
@@ -185,7 +185,7 @@ git commit -m "Add card layout variant to TaskListItem"
 **Files:**
 - Create: `src/components/tasks/kanban-card.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/tasks/kanban-card.tsx`:
 ```tsx
@@ -228,12 +228,12 @@ works alongside normal clicks because `KanbanBoard` (Task 5) configures `Pointer
 minimum drag distance, so a plain click (no pointer movement) never activates a drag and reaches
 the checkbox/button's own click handler normally; only a deliberate press-and-move starts a drag.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/tasks/kanban-card.tsx
@@ -247,7 +247,7 @@ git commit -m "Add draggable Kanban card"
 **Files:**
 - Create: `src/components/tasks/kanban-column.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/tasks/kanban-column.tsx`:
 ```tsx
@@ -298,12 +298,12 @@ export function KanbanColumn({
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/tasks/kanban-column.tsx
@@ -317,7 +317,7 @@ git commit -m "Add droppable Kanban column"
 **Files:**
 - Create: `src/components/tasks/kanban-board.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/tasks/kanban-board.tsx`:
 ```tsx
@@ -402,12 +402,12 @@ sort only happens again once the next server round-trip's data arrives via the e
 its position within the new column's priority order may be briefly approximate. That's an
 accepted, self-correcting trade-off, not a bug.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/tasks/kanban-board.tsx
@@ -421,7 +421,7 @@ git commit -m "Add Kanban board with optimistic drag-and-drop"
 **Files:**
 - Modify: `src/app/(dashboard)/projects/[id]/page.tsx`
 
-- [ ] **Step 1: Replace the flat task list with the Kanban board**
+- [x] **Step 1: Replace the flat task list with the Kanban board**
 
 In `src/app/(dashboard)/projects/[id]/page.tsx`, change the import of `TaskListItem` to import
 `KanbanBoard` instead, and replace the non-empty-state branch's rendering:
@@ -538,12 +538,12 @@ export default async function ProjectDetailPage({
 The header/progress-bar/data-fetching logic is unchanged from Phase 3 — only the final rendering
 branch swaps the flat list for the Kanban board.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npm run build`
 Expected: build succeeds; `/projects/[id]` still listed in the route table.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add "src/app/(dashboard)/projects/[id]/page.tsx"
@@ -554,7 +554,7 @@ git commit -m "Wire Kanban board into the project detail page"
 
 ### Task 7: Final verification
 
-- [ ] **Step 1: Automated checks**
+- [x] **Step 1: Automated checks**
 
 ```bash
 npm run lint
@@ -567,7 +567,7 @@ Expected: all four succeed with no errors. (No new automated tests are added in 
 there's no new pure logic to unit-test; drag-and-drop is UI interaction verified manually below,
 consistent with this project's "unit tests for logic only" policy from Phase 1.)
 
-- [ ] **Step 2: Manual browser walkthrough**
+- [x] **Step 2: Manual browser walkthrough**
 
 `npm run dev`, log in as the seeded demo user (`demo@example.com` / `password123`), open the
 Client Website project:
@@ -589,12 +589,20 @@ Client Website project:
    still works
 8. Check the browser console for errors throughout — expect none
 
-- [ ] **Step 3: Clean up test data**
+**Found during this pass:** step 8 surfaced a real hydration mismatch after step 2's reload —
+`DndContext`'s auto-generated `aria-describedby` id (`DndDescribedBy-0` on the client vs.
+`DndDescribedBy-1` from the server) differed between SSR and hydration, because dnd-kit's internal
+id counter is module-level state that persists across requests in the same Node server process but
+always restarts at 0 on a fresh client load. Fixed by passing a stable `id="kanban-board"` prop to
+`DndContext` in `kanban-board.tsx`, which makes the generated ids deterministic. Re-verified clean
+across multiple reloads afterward. Documented in `CLAUDE.md` for future dnd-kit usage.
+
+- [x] **Step 3: Clean up test data**
 
 Revert any task status changes made purely for testing (e.g. via the UI) back to a state you're
 comfortable with as the ongoing dev fixture, or leave them — this phase doesn't require restoring
 exact seed state since status changes are expected, normal usage.
 
-- [ ] **Step 4: Update plan status**
+- [x] **Step 4: Update plan status**
 
 Mark all checkboxes in this plan complete once every step above has actually passed.

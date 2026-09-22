@@ -36,7 +36,10 @@ Guardrails from the spec (do not violate without explicit user request):
   with database sessions), `bcryptjs` for password hashing (pure JS, no native build step —
   matters for Vercel's serverless functions)
 - Zod for validation, React Hook Form for forms
-- dnd-kit for drag-and-drop (kept deliberately minimal — simple Kanban reordering only)
+- dnd-kit (`@dnd-kit/core` only, not `sortable` — no persisted manual ordering) for drag-and-drop
+  between Kanban columns. Always pass a stable `id` prop to `DndContext` — its internal
+  `aria-describedby` id counter is module-level state that persists across requests in the same
+  Node process but resets on the client, causing an SSR hydration mismatch without it.
 - Sonner for toasts, Lucide React for icons
 - next-themes for light/dark/system mode
 - npm as the package manager
