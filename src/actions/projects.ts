@@ -6,6 +6,7 @@ import { prisma } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { projectSchema, type ProjectInput } from "@/lib/validations/project";
 import { slugify, ensureUniqueSlug } from "@/lib/slugify";
+import { logActivity } from "./activity";
 
 export type ProjectActionResult = { success: true } | { success: false; error: string };
 
@@ -33,7 +34,7 @@ export async function createProject(input: ProjectInput): Promise<ProjectActionR
     existingProjects.map((project) => project.slug)
   );
 
-  await prisma.project.create({
+  const project = await prisma.project.create({
     data: {
       userId,
       slug,
@@ -42,6 +43,13 @@ export async function createProject(input: ProjectInput): Promise<ProjectActionR
       color: parsed.data.color,
       status: parsed.data.status as ProjectStatus,
     },
+  });
+
+  await logActivity({
+    userId,
+    projectId: project.id,
+    type: "PROJECT_CREATED",
+    metadata: { name: project.name },
   });
 
   revalidatePath("/projects");
