@@ -32,15 +32,29 @@ Tailwind's own named palettes at the 500 shade:
 | `#eab308` | yellow |
 | `#64748b` | slate |
 
-New `src/lib/project-color-styles.ts` exports two lookups keyed by that same 8-value hex union
-(mirroring how `priority-styles.ts` already keys off `TASK_PRIORITIES`):
+New `src/lib/project-color-styles.ts` exports three lookups keyed by that same 8-value hex union
+(mirroring how `priority-styles.ts` already keys off `TASK_PRIORITIES`). Per a follow-up request
+during brainstorming, the larger surfaces use a **soft gradient** rather than a flat tint — gentler
+and more "lively" than a single flat color block, while staying soft enough not to trip the
+spec's own "avoid excessive gradients" guardrail (the operative word there is *excessive*; one
+subtle two-stop wash is not that):
 
-- `PROJECT_COLOR_CARD_CLASSES`: a light tinted background + border pairing per color (light- and
-  dark-mode aware), e.g. indigo → `bg-indigo-50 border-indigo-200 dark:bg-indigo-950/20
-  dark:border-indigo-900` — for surfaces that should look like "a card belonging to this project."
-- `PROJECT_COLOR_ACCENT_CLASSES`: a solid `border-l-<color>-500` per color — for a left-border
-  accent on things that shouldn't have their whole background changed (a group heading inside a
-  list that already mixes several projects' worth of visual weight).
+- `PROJECT_COLOR_CARD_CLASSES`: a soft diagonal gradient from the color's lightest tint down to
+  the theme's own `background` token, plus a matching border (light- and dark-mode aware), e.g.
+  indigo → `bg-gradient-to-br from-indigo-50 to-background border-indigo-200 dark:from-indigo-950/40
+  dark:to-background dark:border-indigo-900` — for card-sized surfaces belonging to one project.
+- `PROJECT_COLOR_HEADER_CLASSES`: a wider, even softer horizontal gradient wash (fading to
+  transparent) sized for a page header band, e.g. indigo → `bg-gradient-to-r from-indigo-100
+  via-indigo-50 to-transparent dark:from-indigo-950/30 dark:via-indigo-950/10 dark:to-transparent`.
+- `PROJECT_COLOR_ACCENT_CLASSES`: a solid (non-gradient) `border-l-<color>-500` — kept flat
+  deliberately, for a small, dense element (a group heading inside a list that already mixes
+  several projects' worth of visual weight) where a gradient would have too little surface area to
+  read as anything but noise.
+
+`to-background` resolves through this app's existing `@theme inline` mapping
+(`--color-background: var(--background)`), so the gradient fades into whatever the current warm
+neutral background actually is — not a hardcoded white — and stays correct if that token ever
+changes again.
 
 Since `Project.color` is Zod-`enum`-validated (`z.enum(PROJECT_COLORS)`) at every write path, every
 stored value is guaranteed to be one of these 8 — no "unknown color" fallback case exists.
@@ -52,8 +66,8 @@ stored value is guaranteed to be one of these 8 — no "unknown color" fallback 
   plain neutral `rounded-lg border`. The small color dot next to the project name is removed —
   redundant once the whole card carries that tint.
 - **Project Detail page header** (`/projects/[slug]`): the header block gets a
-  `PROJECT_COLOR_ACCENT_CLASSES[project.color]` left-border accent, so the page immediately reads
-  as "you're inside Project X."
+  `PROJECT_COLOR_HEADER_CLASSES[project.color]` soft gradient wash background, so the page
+  immediately reads as "you're inside Project X" without a harsh block of color.
 - **Kanban task cards**: the card variant of `TaskListItem` gains an optional `projectColor` prop;
   when set, its background picks up `PROJECT_COLOR_CARD_CLASSES[projectColor]` instead of the
   plain `bg-background`. Threaded through `KanbanBoard → KanbanColumn → KanbanCard → TaskListItem`
