@@ -65,11 +65,11 @@ export async function exportUserData() {
   return { projects, tasks, activities };
 }
 
-export async function logout(_formData: FormData): Promise<void> {
+export async function logout(): Promise<void> {
   await signOut({ redirectTo: "/auth/login" });
 }
 
-export async function deleteAccount(_formData: FormData): Promise<void> {
+export async function deleteAccount(): Promise<void> {
   const userId = await requireUserId();
   await prisma.user.delete({ where: { id: userId } });
   await signOut({ redirectTo: "/auth/login" });
