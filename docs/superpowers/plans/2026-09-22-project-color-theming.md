@@ -17,7 +17,7 @@
 **Files:**
 - Create: `src/lib/project-color-styles.ts`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/lib/project-color-styles.ts`:
 ```ts
@@ -75,12 +75,12 @@ export const PROJECT_COLOR_ACCENT_CLASSES: Record<ProjectColor, string> = {
 };
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/lib/project-color-styles.ts
@@ -94,7 +94,7 @@ git commit -m "Add project color gradient/accent style lookups"
 **Files:**
 - Modify: `src/components/projects/project-card.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 Add the import:
 ```ts
@@ -126,12 +126,12 @@ Remove the now-redundant color dot — delete this block from the header row:
 ```
 leaving the `Link` as the only child of that `flex items-center gap-2` div.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/projects/project-card.tsx
@@ -145,7 +145,7 @@ git commit -m "Give ProjectCard a soft gradient background from its project colo
 **Files:**
 - Modify: `src/app/(dashboard)/projects/[slug]/page.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 Add the import:
 ```ts
@@ -186,13 +186,13 @@ to:
 <KanbanBoard initialTasks={taskItems} projects={allProjects} projectColor={project.color} />
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: An error is expected here — `KanbanBoard` doesn't accept a `projectColor` prop yet.
 That's fixed in Task 4; this step is a checkpoint, not a hard gate.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add "src/app/(dashboard)/projects/[slug]/page.tsx"
@@ -209,7 +209,7 @@ git commit -m "Give Project Detail header a soft gradient background from its pr
 - Modify: `src/components/tasks/kanban-card.tsx`
 - Modify: `src/components/tasks/task-list-item.tsx`
 
-- [ ] **Step 1: Update `KanbanBoard`**
+- [x] **Step 1: Update `KanbanBoard`**
 
 Add a `projectColor: string` prop and pass it through to every `KanbanColumn`:
 ```tsx
@@ -234,7 +234,7 @@ and in the render:
 />
 ```
 
-- [ ] **Step 2: Update `KanbanColumn`**
+- [x] **Step 2: Update `KanbanColumn`**
 
 Add the same prop and pass it to `KanbanCard`:
 ```tsx
@@ -257,7 +257,7 @@ and:
 ))}
 ```
 
-- [ ] **Step 3: Update `KanbanCard`**
+- [x] **Step 3: Update `KanbanCard`**
 
 Add the same prop and pass it to `TaskListItem`:
 ```tsx
@@ -276,7 +276,7 @@ and:
 <TaskListItem task={task} projects={projects} variant="card" projectColor={projectColor} />
 ```
 
-- [ ] **Step 4: Update `TaskListItem`**
+- [x] **Step 4: Update `TaskListItem`**
 
 Add an optional `projectColor` prop, used only in the `"card"` variant branch. Add the import:
 ```ts
@@ -316,12 +316,12 @@ elsewhere in this codebase, it isn't threaded through as the exact literal union
 `as keyof typeof` pattern applies. The `"row"` variant branch is untouched — it never receives or
 uses this prop.)
 
-- [ ] **Step 5: Verify**
+- [x] **Step 5: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors (this also resolves the expected Task 3 checkpoint error).
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/components/tasks/kanban-board.tsx src/components/tasks/kanban-column.tsx src/components/tasks/kanban-card.tsx src/components/tasks/task-list-item.tsx
@@ -336,7 +336,7 @@ git commit -m "Thread project color into Kanban card backgrounds"
 - Modify: `src/lib/group-tasks-by-project.ts`
 - Modify: `src/lib/group-tasks-by-project.test.ts`
 
-- [ ] **Step 1: Update the test**
+- [x] **Step 1: Update the test**
 
 `src/lib/group-tasks-by-project.test.ts`:
 ```ts
@@ -393,13 +393,13 @@ describe("groupTasksByProject", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test -- --run group-tasks-by-project`
 Expected: FAIL — the first test's `toEqual` now expects a `projectColor` field the implementation
 doesn't produce yet.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `src/lib/group-tasks-by-project.ts`:
 ```ts
@@ -433,12 +433,12 @@ export function groupTasksByProject(
 }
 ```
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test -- --run group-tasks-by-project`
 Expected: PASS (3 tests)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/group-tasks-by-project.ts src/lib/group-tasks-by-project.test.ts
@@ -452,7 +452,7 @@ git commit -m "Add projectColor to groupTasksByProject"
 **Files:**
 - Modify: `src/components/tasks/task-group-list.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 ```tsx
 import { cn } from "@/lib/utils";
@@ -498,13 +498,13 @@ export function TaskGroupList({
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: An error is expected here too — the call sites (Today page, Dashboard) don't supply
 `projectColor` on their task objects yet. Fixed in Task 7.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/tasks/task-group-list.tsx
@@ -519,7 +519,7 @@ git commit -m "Add project color accent border to TaskGroupList headings"
 - Modify: `src/app/(dashboard)/today/page.tsx`
 - Modify: `src/app/(dashboard)/page.tsx`
 
-- [ ] **Step 1: Update `today/page.tsx`**
+- [x] **Step 1: Update `today/page.tsx`**
 
 All three task queries currently do `include: { project: { select: { id: true, name: true } } }` —
 add `color: true` to each of the three (`overdueRaw`, `dueTodayRaw`, `noDueDateRaw` queries), so
@@ -546,7 +546,7 @@ function toTaskItems(rawTasks: typeof overdueRaw) {
 }
 ```
 
-- [ ] **Step 2: Update `page.tsx` (Dashboard)**
+- [x] **Step 2: Update `page.tsx` (Dashboard)**
 
 The `todaysTasksRaw` query currently does
 `include: { project: { select: { id: true, name: true } } }` — add `color: true`:
@@ -572,12 +572,12 @@ const todayGroups = groupTasksByProject(
 );
 ```
 
-- [ ] **Step 3: Verify**
+- [x] **Step 3: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors (this also resolves the expected Task 6 checkpoint error).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add "src/app/(dashboard)/today/page.tsx" "src/app/(dashboard)/page.tsx"
@@ -590,7 +590,7 @@ git commit -m "Supply project color to Today/Dashboard task groupings"
 
 **Files:** none (verification only)
 
-- [ ] **Step 1: Automated checks**
+- [x] **Step 1: Automated checks**
 
 Run, in order:
 ```bash
@@ -601,7 +601,7 @@ npm run build
 ```
 Expected: all pass with no errors.
 
-- [ ] **Step 2: Manual browser walkthrough**
+- [x] **Step 2: Manual browser walkthrough**
 
 Start the dev server (`npm run dev`) and, logged in as `demo@example.com` / `password123`, check
 **both light and dark mode**:
@@ -623,13 +623,13 @@ Start the dev server (`npm run dev`) and, logged in as `demo@example.com` / `pas
    one consistent action color is undisturbed by all of the above.
 8. Check the browser console for errors throughout — expect none.
 
-- [ ] **Step 3: Mark this plan's checkboxes complete**
+- [x] **Step 3: Mark this plan's checkboxes complete**
 
 ```bash
 sed -i 's/^- \[ \]/- [x]/' docs/superpowers/plans/2026-09-22-project-color-theming.md
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add docs/superpowers/plans/2026-09-22-project-color-theming.md
