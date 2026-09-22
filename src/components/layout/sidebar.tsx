@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { navItems, secondaryNavItems, type NavItem } from "./nav-items";
 import { ThemeToggle } from "./theme-toggle";
+import { SearchPalette } from "@/components/search/search-palette";
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -13,6 +14,7 @@ export function Sidebar() {
     <aside className="hidden w-60 shrink-0 flex-col border-r bg-background md:flex">
       <div className="flex h-14 items-center border-b px-4 font-semibold">Task Tracker</div>
       <nav className="flex flex-1 flex-col gap-1 p-3">
+        <SearchPalette />
         {navItems.map((item) => (
           <SidebarLink key={item.href} item={item} active={pathname === item.href} />
         ))}
