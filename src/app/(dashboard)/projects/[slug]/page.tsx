@@ -7,6 +7,8 @@ import { EditProjectButton } from "@/components/projects/edit-project-button";
 import { AddTaskButton } from "@/components/tasks/add-task-button";
 import { KanbanBoard } from "@/components/tasks/kanban-board";
 import { TaskFilters } from "@/components/tasks/task-filters";
+import { ActivityFeed, type ActivityFeedItem } from "@/components/activity/activity-feed";
+import { formatActivityMessage, type ActivityMessageInput } from "@/lib/format-activity-message";
 import type { TaskListItemData } from "@/components/tasks/task-list-item";
 import type { ProjectInput } from "@/lib/validations/project";
 
@@ -59,7 +61,7 @@ export default async function ProjectDetailPage({
 
   // Progress must reflect ALL of the project's tasks, never the filtered subset above — fetched
   // separately so an active filter can never distort the completed/total ratio.
-  const [allProjects, allProjectTaskStatuses] = await Promise.all([
+  const [allProjects, allProjectTaskStatuses, activityRows] = await Promise.all([
     prisma.project.findMany({
       where: { userId },
       select: { id: true, name: true },
@@ -68,6 +70,11 @@ export default async function ProjectDetailPage({
     prisma.task.findMany({
       where: { projectId: project.id, userId },
       select: { status: true },
+    }),
+    prisma.activity.findMany({
+      where: { projectId: project.id, userId },
+      orderBy: { createdAt: "desc" },
+      take: 10,
     }),
   ]);
 
@@ -87,6 +94,15 @@ export default async function ProjectDetailPage({
   }));
 
   const hasActiveFilters = Boolean(status || priority || due);
+
+  const activityItems: ActivityFeedItem[] = activityRows.map((row) => ({
+    id: row.id,
+    message: formatActivityMessage({
+      type: row.type,
+      metadata: row.metadata,
+    } as unknown as ActivityMessageInput),
+    createdAt: row.createdAt,
+  }));
 
   return (
     <div className="space-y-6">
@@ -142,6 +158,11 @@ export default async function ProjectDetailPage({
       ) : (
         <KanbanBoard initialTasks={taskItems} projects={allProjects} />
       )}
+
+      <section className="space-y-3">
+        <h2 className="text-lg font-medium">Activity</h2>
+        <ActivityFeed items={activityItems} />
+      </section>
     </div>
   );
 }
