@@ -99,7 +99,7 @@ export async function updateTaskStatus(
 
   const task = await prisma.task.findFirst({
     where: { id: taskId, userId },
-    select: { projectId: true },
+    select: { projectId: true, status: true, title: true, project: { select: { name: true } } },
   });
   if (!task) {
     return { success: false, error: "Task not found" };
@@ -112,6 +112,16 @@ export async function updateTaskStatus(
       completedAt: status === "COMPLETED" ? new Date() : null,
     },
   });
+
+  if (status === "COMPLETED" && task.status !== "COMPLETED") {
+    await logActivity({
+      userId,
+      projectId: task.projectId,
+      taskId,
+      type: "TASK_COMPLETED",
+      metadata: { title: task.title, projectName: task.project.name },
+    });
+  }
 
   revalidatePath(`/projects/${task.projectId}`);
   revalidatePath("/projects");
