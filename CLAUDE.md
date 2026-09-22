@@ -147,7 +147,7 @@ it needs to show a confirmation prompt — e.g. adding a unique constraint that 
 existing duplicate data (`Error: Prisma Migrate has detected that the environment is
 non-interactive`). Work around it without ever touching `migrate dev`'s interactive path:
 
-1. Generate the raw SQL yourself: `npx prisma migrate diff --from-migrations prisma/migrations --to-schema-datamodel prisma/schema.prisma --shadow-database-url "$DIRECT_URL" --script`
+1. Generate the raw SQL yourself: `npx prisma migrate diff --from-migrations prisma/migrations --to-schema-datamodel prisma/schema.prisma --script`. **Never pass `--shadow-database-url` pointed at `$DIRECT_URL` or `$DATABASE_URL`** — a shadow database is scratch space Prisma creates, replays migration history into, diffs, and drops; pointing it at the real database has, on this project, wiped every table's rows (schema survived, data didn't — recoverable in principle via Neon's point-in-time restore, but don't rely on that). Omit the flag entirely and let Prisma create its own temporary shadow database automatically.
 2. Write that output into a new `prisma/migrations/<timestamp>_<name>/migration.sql` by hand
 3. Apply it with `npx prisma migrate deploy` — `deploy` never prompts, by design (it's meant for
    CI/non-interactive use)

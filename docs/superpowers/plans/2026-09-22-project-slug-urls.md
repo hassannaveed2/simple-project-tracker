@@ -18,7 +18,7 @@
 - Create: `src/lib/slugify.ts`
 - Test: `src/lib/slugify.test.ts`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 `src/lib/slugify.test.ts`:
 ```ts
@@ -66,12 +66,12 @@ describe("ensureUniqueSlug", () => {
 });
 ```
 
-- [ ] **Step 2: Run tests to verify they fail**
+- [x] **Step 2: Run tests to verify they fail**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module './slugify'`
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `src/lib/slugify.ts`:
 ```ts
@@ -96,12 +96,12 @@ export function ensureUniqueSlug(baseSlug: string, existingSlugs: string[]): str
 }
 ```
 
-- [ ] **Step 4: Run tests to verify they pass**
+- [x] **Step 4: Run tests to verify they pass**
 
 Run: `npm test`
 Expected: PASS (8 tests)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/slugify.ts src/lib/slugify.test.ts
@@ -116,7 +116,7 @@ git commit -m "Add slugify and ensureUniqueSlug utilities"
 - Modify: `prisma/schema.prisma`
 - Create: `prisma/migrations/<timestamp>_add_project_slug_nullable/migration.sql` (generated)
 
-- [ ] **Step 1: Add the nullable field**
+- [x] **Step 1: Add the nullable field**
 
 In `prisma/schema.prisma`, add `slug` to the `Project` model, right after `userId`:
 
@@ -141,7 +141,7 @@ model Project {
 }
 ```
 
-- [ ] **Step 2: Generate the migration without applying it**
+- [x] **Step 2: Generate the migration without applying it**
 
 ```bash
 npx prisma migrate dev --create-only --name add_project_slug_nullable
@@ -150,7 +150,7 @@ npx prisma migrate dev --create-only --name add_project_slug_nullable
 `--create-only` writes the migration SQL file without running it, so there's no chance of hitting
 an interactive prompt here even if one were possible for this (safe, nullable-column) change.
 
-- [ ] **Step 3: Review the generated SQL**
+- [x] **Step 3: Review the generated SQL**
 
 Open the newly created `prisma/migrations/<timestamp>_add_project_slug_nullable/migration.sql` and
 confirm it's a single, simple statement:
@@ -158,7 +158,7 @@ confirm it's a single, simple statement:
 ALTER TABLE "Project" ADD COLUMN "slug" TEXT;
 ```
 
-- [ ] **Step 4: Apply it**
+- [x] **Step 4: Apply it**
 
 ```bash
 npx prisma migrate deploy
@@ -167,12 +167,12 @@ npx prisma migrate deploy
 `migrate deploy` applies pending migrations non-interactively — no prompts possible, unlike
 `migrate dev`'s apply step.
 
-- [ ] **Step 5: Verify**
+- [x] **Step 5: Verify**
 
 Run: `npx prisma validate`
 Expected: `The schema at prisma/schema.prisma is valid`
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add prisma/schema.prisma prisma/migrations
@@ -187,7 +187,7 @@ git commit -m "Add nullable slug column to Project"
 - Create (scratch, not committed): a one-off script outside the repo, e.g. in your scratchpad
   directory — this script is run once and discarded, not part of the codebase
 
-- [ ] **Step 1: Write the backfill script**
+- [x] **Step 1: Write the backfill script**
 
 Save this as `backfill-project-slugs.ts` in your scratchpad directory (not inside the project —
 it's a one-time script, not application code):
@@ -247,7 +247,7 @@ main()
 This duplicates `slugify`/`ensureUniqueSlug` inline rather than importing Task 1's versions — it's
 a throwaway script, not worth wiring up cross-project import resolution for.
 
-- [ ] **Step 2: Run it from the project root**
+- [x] **Step 2: Run it from the project root**
 
 ```bash
 npx tsx /path/to/your/scratchpad/backfill-project-slugs.ts
@@ -255,7 +255,7 @@ npx tsx /path/to/your/scratchpad/backfill-project-slugs.ts
 
 Expected: prints one `<name> -> <slug>` line per existing project, then `Backfilled N project(s).`
 
-- [ ] **Step 3: Verify no nulls remain**
+- [x] **Step 3: Verify no nulls remain**
 
 ```bash
 node -e "
@@ -270,7 +270,7 @@ prisma.project.count({ where: { slug: null } }).then((count) => {
 
 Expected: `projects with null slug: 0`
 
-- [ ] **Step 4: Delete the scratch script**
+- [x] **Step 4: Delete the scratch script**
 
 It served its one-time purpose; there's nothing to commit for this task.
 
@@ -283,7 +283,7 @@ It served its one-time purpose; there's nothing to commit for this task.
 - Create: `prisma/migrations/<timestamp>_add_project_slug_required_unique/migration.sql`
   (generated)
 
-- [ ] **Step 1: Tighten the field**
+- [x] **Step 1: Tighten the field**
 
 In `prisma/schema.prisma`, change the `Project` model's `slug` field and add the unique
 constraint:
@@ -310,30 +310,51 @@ model Project {
 }
 ```
 
-- [ ] **Step 2: Generate the migration without applying it**
+- [x] **Step 2: Generate the migration without applying it**
 
 ```bash
 npx prisma migrate dev --create-only --name add_project_slug_required_unique
 ```
 
-- [ ] **Step 3: Review the generated SQL**
+**What actually happened here:** this command hard-refused —
+`Error: Prisma Migrate has detected that the environment is non-interactive` — because adding a
+unique constraint that *could* fail against duplicate data triggers a confirmation prompt even
+with `--create-only`. Worked around it with `npx prisma migrate diff --from-migrations
+prisma/migrations --to-schema-datamodel prisma/schema.prisma --shadow-database-url "$DIRECT_URL"
+--script`, writing the output into the migration folder by hand. **That `--shadow-database-url
+"$DIRECT_URL"` was a serious mistake** — a shadow database is meant to be disposable scratch space
+Prisma creates, migrates through history, diffs, and drops; pointing it at the real `DIRECT_URL`
+caused it to wipe every table's rows (`User`, `Project`, `Task`, `Activity` — all emptied, though
+the tables themselves survived). If this step needs repeating, generate the diff without
+`--shadow-database-url` (Prisma will create its own temporary shadow DB), or compute the migration
+SQL by hand instead. The demo seed data was restored via `npx prisma db seed`; a real project the
+user had created directly in the database (not seed data) was not recoverable this way and was
+lost — see the design doc / session history for the full incident.
+
+Separately (unrelated to the above): applying migrations after this also hit `P3005: The database
+schema is not empty`, because `_prisma_migrations` had gone missing even though earlier migrations'
+effects were genuinely already present. Resolved via `npx prisma migrate resolve --applied
+<name>` for the earlier migrations, then `migrate deploy` to actually run this one — see
+`CLAUDE.md`'s "Neon connectivity" section for the full baseline procedure.
+
+- [x] **Step 3: Review the generated SQL**
 
 Open `prisma/migrations/<timestamp>_add_project_slug_required_unique/migration.sql` and confirm it
 contains an `ALTER COLUMN "slug" SET NOT NULL` and a `CREATE UNIQUE INDEX` on `("userId", "slug")`.
 Since Task 3 already backfilled every row, this is safe to apply as generated.
 
-- [ ] **Step 4: Apply it**
+- [x] **Step 4: Apply it**
 
 ```bash
 npx prisma migrate deploy
 ```
 
-- [ ] **Step 5: Verify**
+- [x] **Step 5: Verify**
 
 Run: `npx prisma validate && npx tsc --noEmit`
 Expected: both succeed with no errors.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add prisma/schema.prisma prisma/migrations
@@ -347,7 +368,7 @@ git commit -m "Make Project.slug required and unique per user"
 **Files:**
 - Modify: `prisma/seed.ts`
 
-- [ ] **Step 1: Update the seed script**
+- [x] **Step 1: Update the seed script**
 
 In `prisma/seed.ts`, add this import at the top (relative import, not the `@/` alias — `tsx`
 running this file directly shouldn't be assumed to resolve path aliases):
@@ -390,12 +411,12 @@ const personalWebsite = await prisma.project.create({
 });
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add prisma/seed.ts
@@ -409,7 +430,7 @@ git commit -m "Generate real slugs in the seed script"
 **Files:**
 - Modify: `src/actions/projects.ts`
 
-- [ ] **Step 1: Update createProject**
+- [x] **Step 1: Update createProject**
 
 In `src/actions/projects.ts`, add the import and update `createProject`'s body:
 
@@ -455,12 +476,12 @@ export async function createProject(input: ProjectInput): Promise<ProjectActionR
 `updateProject` is intentionally left unchanged — slugs are immutable once set, per the design
 doc, so renaming a project never touches `slug`.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/actions/projects.ts
@@ -474,7 +495,7 @@ git commit -m "Generate a unique slug when creating a project"
 **Files:**
 - Move: `src/app/(dashboard)/projects/[id]/page.tsx` → `src/app/(dashboard)/projects/[slug]/page.tsx`
 
-- [ ] **Step 1: Move the file**
+- [x] **Step 1: Move the file**
 
 ```bash
 mkdir -p "src/app/(dashboard)/projects/[slug]"
@@ -482,7 +503,7 @@ git mv "src/app/(dashboard)/projects/[id]/page.tsx" "src/app/(dashboard)/project
 rmdir "src/app/(dashboard)/projects/[id]"
 ```
 
-- [ ] **Step 2: Update the page to look up by slug**
+- [x] **Step 2: Update the page to look up by slug**
 
 Replace the full contents of `src/app/(dashboard)/projects/[slug]/page.tsx`:
 
@@ -599,12 +620,12 @@ Only the `params` type, the destructured variable, and the `findFirst` `where` c
 (`id` → `slug`) from the previous version — everything else (header, progress bar, task fetching
 shape, Kanban board wiring) is identical to what Phase 3/4 already built.
 
-- [ ] **Step 3: Verify**
+- [x] **Step 3: Verify**
 
 Run: `npm run build`
 Expected: build succeeds; the route table shows `/projects/[slug]` instead of `/projects/[id]`.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add "src/app/(dashboard)/projects"
@@ -619,7 +640,7 @@ git commit -m "Route project detail pages by slug instead of id"
 - Modify: `src/app/(dashboard)/projects/page.tsx`
 - Modify: `src/components/projects/project-card.tsx`
 
-- [ ] **Step 1: Include slug in the card data**
+- [x] **Step 1: Include slug in the card data**
 
 In `src/app/(dashboard)/projects/page.tsx`, add `slug: project.slug` to the object literal built
 for each `ProjectCardData`:
@@ -648,7 +669,7 @@ for each `ProjectCardData`:
 (The Prisma query above this already uses `include`, which returns every scalar column including
 the new `slug` — no query change needed, just picking it up in the mapped object.)
 
-- [ ] **Step 2: Add slug to ProjectCardData and use it for links**
+- [x] **Step 2: Add slug to ProjectCardData and use it for links**
 
 In `src/components/projects/project-card.tsx`, add `slug: string` to the `ProjectCardData` type
 and change both `Link` elements to use it instead of `project.id`:
@@ -676,13 +697,13 @@ export type ProjectCardData = ProjectInput & {
             </DropdownMenuItem>
 ```
 
-- [ ] **Step 3: Verify**
+- [x] **Step 3: Verify**
 
 Run: `npm run build`
 Expected: build succeeds with no type errors (the `ProjectCardData` shape change is caught by
 `tsc` if any usage is missed).
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add "src/app/(dashboard)/projects/page.tsx" src/components/projects/project-card.tsx
@@ -693,7 +714,7 @@ git commit -m "Link project cards by slug"
 
 ### Task 9: Final verification
 
-- [ ] **Step 1: Automated checks**
+- [x] **Step 1: Automated checks**
 
 ```bash
 npm run lint
@@ -704,7 +725,7 @@ npm run build
 
 Expected: all four succeed with no errors.
 
-- [ ] **Step 2: Manual browser walkthrough**
+- [x] **Step 2: Manual browser walkthrough**
 
 `npm run dev`, log in as the seeded demo user:
 
@@ -719,11 +740,11 @@ Expected: all four succeed with no errors.
    isolation still holds)
 6. Check the browser console for errors throughout — expect none
 
-- [ ] **Step 3: Clean up test data**
+- [x] **Step 3: Clean up test data**
 
 Delete the two "Test Project" projects and the second test user created in Step 2, via the UI or
 `npx prisma studio`, so the seeded demo data stays the canonical dev fixture.
 
-- [ ] **Step 4: Update plan status**
+- [x] **Step 4: Update plan status**
 
 Mark all checkboxes in this plan complete once every step above has actually passed.
