@@ -8,6 +8,8 @@ import { TaskGroupList } from "@/components/tasks/task-group-list";
 import { UpcomingTaskRow, type UpcomingTaskData } from "@/components/dashboard/upcoming-task-row";
 import { DashboardCalendar } from "@/components/dashboard/dashboard-calendar";
 import { ProjectCard } from "@/components/projects/project-card";
+import { ActivityFeed, type ActivityFeedItem } from "@/components/activity/activity-feed";
+import { formatActivityMessage, type ActivityMessageInput } from "@/lib/format-activity-message";
 
 function addDays(date: Date, days: number): Date {
   return new Date(date.getTime() + days * 24 * 60 * 60 * 1000);
@@ -40,6 +42,7 @@ export default async function DashboardPage() {
     windowTasksRaw,
     recentProjectsRaw,
     allProjectsForTaskForm,
+    recentActivityRaw,
   ] = await Promise.all([
     prisma.project.count({ where: { userId } }),
     prisma.task.count({ where: { userId, status: { not: "COMPLETED" } } }),
@@ -74,6 +77,11 @@ export default async function DashboardPage() {
       select: { id: true, name: true },
       orderBy: { name: "asc" },
     }),
+    prisma.activity.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+    }),
   ]);
 
   const todayGroups = groupTasksByProject(
@@ -105,6 +113,15 @@ export default async function DashboardPage() {
     .slice(0, 5);
 
   const recentProjects = recentProjectsRaw.map(toProjectCardData);
+
+  const recentActivityItems: ActivityFeedItem[] = recentActivityRaw.map((row) => ({
+    id: row.id,
+    message: formatActivityMessage({
+      type: row.type,
+      metadata: row.metadata,
+    } as unknown as ActivityMessageInput),
+    createdAt: row.createdAt,
+  }));
 
   return (
     <div className="space-y-8">
@@ -162,10 +179,17 @@ export default async function DashboardPage() {
           </section>
         </div>
 
-        <section className="space-y-3">
-          <h2 className="text-lg font-medium">Calendar</h2>
-          <DashboardCalendar tasks={windowTaskItems} />
-        </section>
+        <div className="space-y-8">
+          <section className="space-y-3">
+            <h2 className="text-lg font-medium">Calendar</h2>
+            <DashboardCalendar tasks={windowTaskItems} />
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="text-lg font-medium">Recent Activity</h2>
+            <ActivityFeed items={recentActivityItems} />
+          </section>
+        </div>
       </div>
     </div>
   );
