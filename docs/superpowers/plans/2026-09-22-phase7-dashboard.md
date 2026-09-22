@@ -17,25 +17,25 @@
 **Files:**
 - Create: `src/components/ui/calendar.tsx`
 
-- [ ] **Step 1: Add the component**
+- [x] **Step 1: Add the component**
 
 ```bash
 npx shadcn@3.8.5 add calendar --yes
 ```
 
-- [ ] **Step 2: Check its actual API**
+- [x] **Step 2: Check its actual API**
 
 Open the generated `src/components/ui/calendar.tsx` and confirm the exported `Calendar`
 component accepts `mode`, `selected`, `onSelect`, `modifiers`, and `modifiersClassNames` props
 (standard react-day-picker single-select props). Task 7 assumes this API — if the generated
 component's prop names differ, adapt Task 7's code to match what's actually there.
 
-- [ ] **Step 3: Verify**
+- [x] **Step 3: Verify**
 
 Run: `npm run build`
 Expected: build succeeds; `src/components/ui/calendar.tsx` exists.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/components/ui/calendar.tsx package.json package-lock.json
@@ -50,7 +50,7 @@ git commit -m "Add calendar shadcn component"
 - Create: `src/lib/greeting.ts`
 - Test: `src/lib/greeting.test.ts`
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `src/lib/greeting.test.ts`:
 ```ts
@@ -80,12 +80,12 @@ describe("getGreeting", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module './greeting'`
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `src/lib/greeting.ts`:
 ```ts
@@ -101,12 +101,12 @@ Takes an hour (0–23) rather than a `Date` so it's trivial to test — the call
 visitor's, for the same reason `formatDueDate` (Phase 3) does all its day-boundary math in UTC:
 this app has no per-user timezone concept anywhere, so UTC is the one consistent reference point.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (4 tests)
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/lib/greeting.ts src/lib/greeting.test.ts
@@ -122,7 +122,7 @@ git commit -m "Add greeting utility"
 - Test: `src/lib/project-card-data.test.ts`
 - Modify: `src/app/(dashboard)/projects/page.tsx` (adopt the helper)
 
-- [ ] **Step 1: Write the failing test**
+- [x] **Step 1: Write the failing test**
 
 `src/lib/project-card-data.test.ts`:
 ```ts
@@ -175,12 +175,12 @@ describe("toProjectCardData", () => {
 });
 ```
 
-- [ ] **Step 2: Run test to verify it fails**
+- [x] **Step 2: Run test to verify it fails**
 
 Run: `npm test`
 Expected: FAIL — `Cannot find module './project-card-data'`
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `src/lib/project-card-data.ts`:
 ```ts
@@ -224,12 +224,12 @@ export function toProjectCardData(project: ProjectForCard): ProjectCardData {
 keeps the function testable with a plain object (no Prisma/database needed in the test above) and
 mirrors the same decoupling reasoning as `lib/validations/*.ts`.
 
-- [ ] **Step 4: Run test to verify it passes**
+- [x] **Step 4: Run test to verify it passes**
 
 Run: `npm test`
 Expected: PASS (2 tests)
 
-- [ ] **Step 5: Adopt it in `/projects/page.tsx`**
+- [x] **Step 5: Adopt it in `/projects/page.tsx`**
 
 Replace the full contents of `src/app/(dashboard)/projects/page.tsx`:
 
@@ -282,12 +282,12 @@ export default async function ProjectsPage() {
 }
 ```
 
-- [ ] **Step 6: Verify**
+- [x] **Step 6: Verify**
 
 Run: `npm run build`
 Expected: build succeeds, `/projects` unchanged in behavior.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/lib/project-card-data.ts src/lib/project-card-data.test.ts "src/app/(dashboard)/projects/page.tsx"
@@ -301,7 +301,7 @@ git commit -m "Extract shared project-card mapping helper"
 **Files:**
 - Create: `src/components/dashboard/stat-card.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/dashboard/stat-card.tsx`:
 ```tsx
@@ -317,12 +317,12 @@ export function StatCard({ label, value }: { label: string; value: number }) {
 
 No `"use client"` needed — purely presentational, renders fine from the Server Component page.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/dashboard/stat-card.tsx
@@ -336,7 +336,7 @@ git commit -m "Add dashboard stat card"
 **Files:**
 - Create: `src/components/dashboard/today-tasks-section.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/dashboard/today-tasks-section.tsx`:
 ```tsx
@@ -382,12 +382,12 @@ No `"use client"` here either — this component itself has no interactivity of 
 renders `TaskListItem` (which is a Client Component) as children, which Next.js's App Router
 supports natively.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/dashboard/today-tasks-section.tsx
@@ -401,7 +401,7 @@ git commit -m "Add Today's Tasks dashboard section"
 **Files:**
 - Create: `src/components/dashboard/upcoming-task-row.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/dashboard/upcoming-task-row.tsx`:
 ```tsx
@@ -456,12 +456,12 @@ for this section (name/project/due date/priority) doesn't ask for inline editing
 heavier `TaskListItem` (which embeds a full edit sheet) here would be scope creep for what's meant
 to be a quick preview.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/dashboard/upcoming-task-row.tsx
@@ -475,7 +475,7 @@ git commit -m "Add upcoming task row"
 **Files:**
 - Create: `src/components/dashboard/dashboard-calendar.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/dashboard/dashboard-calendar.tsx`:
 ```tsx
@@ -528,13 +528,13 @@ export function DashboardCalendar({ tasks }: { tasks: UpcomingTaskData[] }) {
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors. If `Calendar`'s actual prop names differ from what Task 1 assumed, adjust
 here to match — check `src/components/ui/calendar.tsx`'s exports.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/dashboard/dashboard-calendar.tsx
@@ -548,7 +548,7 @@ git commit -m "Add dashboard calendar widget"
 **Files:**
 - Modify: `src/app/(dashboard)/page.tsx`
 
-- [ ] **Step 1: Replace the placeholder**
+- [x] **Step 1: Replace the placeholder**
 
 Replace the full contents of `src/app/(dashboard)/page.tsx`:
 
@@ -739,13 +739,13 @@ export default async function DashboardPage() {
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npm run build`
 Expected: build succeeds; `/` shows real content in the route table (no longer a trivial static
 placeholder).
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add "src/app/(dashboard)/page.tsx"
@@ -756,7 +756,7 @@ git commit -m "Wire up the Dashboard page"
 
 ### Task 9: Final verification
 
-- [ ] **Step 1: Automated checks**
+- [x] **Step 1: Automated checks**
 
 ```bash
 npm run lint
@@ -767,7 +767,7 @@ npm run build
 
 Expected: all four succeed with no errors.
 
-- [ ] **Step 2: Manual browser walkthrough**
+- [x] **Step 2: Manual browser walkthrough**
 
 `npm run dev`, log in as the seeded demo user:
 
@@ -789,10 +789,21 @@ Expected: all four succeed with no errors.
    first project…") rather than a broken layout
 7. Check the browser console for errors throughout — expect none
 
-- [ ] **Step 3: Clean up test data**
+**Found during this pass:** step 5's click-a-marked-date check failed on a UTC+5 dev machine — a
+task genuinely due that day showed "No tasks due this day." The `hasTask` marker itself was
+correct (visibly distinct from react-day-picker's own "today" highlight, confirmed by adding a
+task due on a different day and screenshotting), but the click filter's `tasksOnSelectedDate`
+logic ran `selectedDate` (already local midnight for the clicked day, straight from
+react-day-picker) through the same `toLocalMidnight()` re-anchoring meant only for `task.dueDate`
+(a UTC-stored instant) — double-converting it shifted the comparison by the browser's UTC offset.
+Fixed by comparing `selectedDate` directly, only re-anchoring the task dates. Re-verified clean
+after the fix: the marked date's task appeared, an unmarked date correctly showed the empty
+message, and the fix passed lint/tsc/test/build again.
+
+- [x] **Step 3: Clean up test data**
 
 Delete the second test user created in Step 2 via `npx prisma studio` or a one-off script.
 
-- [ ] **Step 4: Update plan status**
+- [x] **Step 4: Update plan status**
 
 Mark all checkboxes in this plan complete once every step above has actually passed.
