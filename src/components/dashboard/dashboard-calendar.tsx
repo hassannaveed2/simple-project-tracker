@@ -19,7 +19,11 @@ export function DashboardCalendar({ tasks }: { tasks: UpcomingTaskData[] }) {
 
   const tasksOnSelectedDate = useMemo(() => {
     if (!selectedDate) return [];
-    const selectedTime = toLocalMidnight(selectedDate).getTime();
+    // selectedDate comes straight from react-day-picker as local midnight for the clicked day —
+    // it must NOT be passed through toLocalMidnight again (that function assumes a UTC-anchored
+    // input, like task.dueDate; re-running it on an already-local date shifts the day by however
+    // far the browser's timezone offset is from UTC).
+    const selectedTime = selectedDate.getTime();
     return tasks.filter((task) => toLocalMidnight(task.dueDate).getTime() === selectedTime);
   }, [tasks, selectedDate]);
 
