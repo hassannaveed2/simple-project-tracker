@@ -17,7 +17,7 @@
 **Files:**
 - Create: `src/components/ui/page-loading.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/components/ui/page-loading.tsx`:
 ```tsx
@@ -32,12 +32,12 @@ export function PageLoading() {
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/ui/page-loading.tsx
@@ -57,7 +57,7 @@ git commit -m "Add shared PageLoading spinner component"
 - Create: `src/app/(dashboard)/completed/loading.tsx`
 - Create: `src/app/(dashboard)/settings/loading.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 Each of the 7 files above has the identical content:
 ```tsx
@@ -68,12 +68,12 @@ export default function Loading() {
 }
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add "src/app/(dashboard)/loading.tsx" "src/app/(dashboard)/projects/loading.tsx" "src/app/(dashboard)/projects/[slug]/loading.tsx" "src/app/(dashboard)/today/loading.tsx" "src/app/(dashboard)/upcoming/loading.tsx" "src/app/(dashboard)/completed/loading.tsx" "src/app/(dashboard)/settings/loading.tsx"
@@ -87,7 +87,7 @@ git commit -m "Add loading.tsx to every dashboard route"
 **Files:**
 - Modify: `src/actions/tasks.ts`
 
-- [ ] **Step 1: `createTask`**
+- [x] **Step 1: `createTask`**
 
 Change the project lookup's `select` from `{ id: true, name: true }` to
 `{ id: true, name: true, slug: true }`, and change:
@@ -99,7 +99,7 @@ to:
 revalidatePath(`/projects/${project.slug}`);
 ```
 
-- [ ] **Step 2: `updateTask`**
+- [x] **Step 2: `updateTask`**
 
 Same change: the project lookup's `select` gains `slug: true`, and:
 ```ts
@@ -110,7 +110,7 @@ becomes:
 revalidatePath(`/projects/${project.slug}`);
 ```
 
-- [ ] **Step 3: `updateTaskStatus`**
+- [x] **Step 3: `updateTaskStatus`**
 
 This function loads the project via a nested `project: { select: { name: true } }` — widen it to
 `project: { select: { name: true, slug: true } }`, and change:
@@ -122,7 +122,7 @@ to:
 revalidatePath(`/projects/${task.project.slug}`);
 ```
 
-- [ ] **Step 4: `deleteTask`**
+- [x] **Step 4: `deleteTask`**
 
 This function currently selects `{ projectId: true }`, and `task.projectId` is used nowhere else
 in the function besides the `revalidatePath` call being fixed here — replace it outright with the
@@ -142,12 +142,12 @@ to:
 revalidatePath(`/projects/${task.project.slug}`);
 ```
 
-- [ ] **Step 5: Verify**
+- [x] **Step 5: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/actions/tasks.ts
@@ -160,7 +160,7 @@ git commit -m "Fix revalidatePath to use project slug instead of raw id"
 
 **Files:** none (verification only)
 
-- [ ] **Step 1: Automated checks**
+- [x] **Step 1: Automated checks**
 
 Run, in order:
 ```bash
@@ -171,7 +171,7 @@ npm run build
 ```
 Expected: all pass with no errors.
 
-- [ ] **Step 2: Manual browser walkthrough**
+- [x] **Step 2: Manual browser walkthrough**
 
 Start the dev server (`npm run dev`) and, logged in as `demo@example.com` / `password123`:
 
@@ -190,13 +190,13 @@ Start the dev server (`npm run dev`) and, logged in as `demo@example.com` / `pas
 6. Check the browser console for errors throughout — expect none (aside from the
    already-documented, pre-existing intermittent Radix `useId` hydration warning).
 
-- [ ] **Step 3: Mark this plan's checkboxes complete**
+- [x] **Step 3: Mark this plan's checkboxes complete**
 
 ```bash
 sed -i 's/^- \[ \]/- [x]/' docs/superpowers/plans/2026-09-22-loading-states-and-perf.md
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add docs/superpowers/plans/2026-09-22-loading-states-and-perf.md
