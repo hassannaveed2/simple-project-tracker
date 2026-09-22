@@ -4,7 +4,8 @@ import { prisma } from "@/lib/db";
 import { computeProjectProgress } from "@/lib/progress";
 import { EditProjectButton } from "@/components/projects/edit-project-button";
 import { AddTaskButton } from "@/components/tasks/add-task-button";
-import { TaskListItem, type TaskListItemData } from "@/components/tasks/task-list-item";
+import { KanbanBoard } from "@/components/tasks/kanban-board";
+import type { TaskListItemData } from "@/components/tasks/task-list-item";
 import type { ProjectInput } from "@/lib/validations/project";
 
 export default async function ProjectDetailPage({
@@ -98,11 +99,7 @@ export default async function ProjectDetailPage({
           <AddTaskButton projects={allProjects} defaultProjectId={project.id} label="Add Task" />
         </div>
       ) : (
-        <div className="space-y-2">
-          {taskItems.map((task) => (
-            <TaskListItem key={task.id} task={task} projects={allProjects} />
-          ))}
-        </div>
+        <KanbanBoard initialTasks={taskItems} projects={allProjects} />
       )}
     </div>
   );
