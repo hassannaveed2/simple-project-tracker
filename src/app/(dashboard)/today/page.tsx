@@ -24,17 +24,17 @@ export default async function TodayPage() {
   const [overdueRaw, dueTodayRaw, noDueDateRaw, allProjects] = await Promise.all([
     prisma.task.findMany({
       where: { userId, status: { not: "COMPLETED" }, dueDate: { lt: todayStart } },
-      include: { project: { select: { id: true, name: true } } },
+      include: { project: { select: { id: true, name: true, color: true } } },
       orderBy: [{ priority: "desc" }],
     }),
     prisma.task.findMany({
       where: { userId, status: { not: "COMPLETED" }, dueDate: { gte: todayStart, lt: todayEnd } },
-      include: { project: { select: { id: true, name: true } } },
+      include: { project: { select: { id: true, name: true, color: true } } },
       orderBy: [{ priority: "desc" }],
     }),
     prisma.task.findMany({
       where: { userId, status: { not: "COMPLETED" }, dueDate: null },
-      include: { project: { select: { id: true, name: true } } },
+      include: { project: { select: { id: true, name: true, color: true } } },
       orderBy: [{ priority: "desc" }],
     }),
     prisma.project.findMany({
@@ -55,6 +55,7 @@ export default async function TodayPage() {
       status: task.status,
       dueDate: task.dueDate ? task.dueDate.toISOString().slice(0, 10) : "",
       projectName: task.project.name,
+      projectColor: task.project.color,
     }));
   }
 
