@@ -17,7 +17,7 @@
 **Files:**
 - Modify: `src/app/globals.css`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 Replace the `:root { ... }` block's color values (leave `--radius` and the `--chart-*` tokens
 unchanged — they're unused anywhere in the app today) with:
@@ -113,12 +113,12 @@ Notes on the values (already contrast-verified, not re-derived during implementa
   doesn't currently reference them (it uses `bg-background`/`border-r` directly) — they're part of
   the shared shadcn theme block and shouldn't be left stale/mismatched.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit && npm run build`
 Expected: no errors (this is a pure CSS change, but confirms nothing else broke).
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/app/globals.css
@@ -132,7 +132,7 @@ git commit -m "Add warm accent color and warm-tinted neutrals"
 **Files:**
 - Create: `src/lib/priority-styles.ts`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 `src/lib/priority-styles.ts`:
 ```ts
@@ -160,12 +160,12 @@ This replaces the two independently-duplicated `PRIORITY_LABELS` maps in
 *color* map is a real drift risk in a way duplicated label strings aren't (a future color tweak in
 one file could silently diverge from the other).
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/lib/priority-styles.ts
@@ -180,7 +180,7 @@ git commit -m "Add shared priority label/badge color styles"
 - Modify: `src/components/tasks/task-list-item.tsx`
 - Modify: `src/components/dashboard/upcoming-task-row.tsx`
 
-- [ ] **Step 1: Implement `task-list-item.tsx`**
+- [x] **Step 1: Implement `task-list-item.tsx`**
 
 Remove the local `PRIORITY_LABELS` constant (lines 13–18) and its import gap, replacing the top of
 the file:
@@ -215,7 +215,7 @@ to:
 (there are two occurrences — one inside the `if (variant === "card")` block, one in the final
 `return`).
 
-- [ ] **Step 2: Implement `upcoming-task-row.tsx`**
+- [x] **Step 2: Implement `upcoming-task-row.tsx`**
 
 Replace the full contents of `src/components/dashboard/upcoming-task-row.tsx`:
 
@@ -272,12 +272,12 @@ unlike `task-list-item.tsx`'s `TaskListItemData`, which gets its priority type f
 file's pre-existing behavior: it already indexed its own local `Record<string, string>` the same
 loose way.)
 
-- [ ] **Step 3: Verify**
+- [x] **Step 3: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/components/tasks/task-list-item.tsx src/components/dashboard/upcoming-task-row.tsx
@@ -290,7 +290,7 @@ git commit -m "Apply color-coded priority badges"
 
 **Files:** none (verification only)
 
-- [ ] **Step 1: Automated checks**
+- [x] **Step 1: Automated checks**
 
 Run, in order:
 ```bash
@@ -301,7 +301,7 @@ npm run build
 ```
 Expected: all pass with no errors.
 
-- [ ] **Step 2: Manual browser walkthrough**
+- [x] **Step 2: Manual browser walkthrough**
 
 Start the dev server (`npm run dev`) and, logged in as `demo@example.com` / `password123`, check
 **both light and dark mode** (toggle via the sidebar theme control) on:
@@ -324,13 +324,13 @@ Start the dev server (`npm run dev`) and, logged in as `demo@example.com` / `pas
 7. Check the browser console for errors throughout — expect none (aside from the
    already-documented, pre-existing intermittent Radix `useId` hydration warning).
 
-- [ ] **Step 3: Mark this plan's checkboxes complete**
+- [x] **Step 3: Mark this plan's checkboxes complete**
 
 ```bash
 sed -i 's/^- \[ \]/- [x]/' docs/superpowers/plans/2026-09-22-warm-color-system.md
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add docs/superpowers/plans/2026-09-22-warm-color-system.md
