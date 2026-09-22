@@ -15,6 +15,8 @@ import {
 import { archiveProject } from "@/actions/projects";
 import { ProjectFormSheet } from "./project-form-sheet";
 import { DeleteProjectDialog } from "./delete-project-dialog";
+import { cn } from "@/lib/utils";
+import { PROJECT_COLOR_CARD_CLASSES } from "@/lib/project-color-styles";
 import type { ProjectInput } from "@/lib/validations/project";
 
 const STATUS_LABELS: Record<string, string> = {
@@ -47,13 +49,14 @@ export function ProjectCard({ project }: { project: ProjectCardData }) {
   }
 
   return (
-    <div className="flex flex-col gap-3 rounded-lg border p-4">
+    <div
+      className={cn(
+        "flex flex-col gap-3 rounded-lg border p-4",
+        PROJECT_COLOR_CARD_CLASSES[project.color]
+      )}
+    >
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span
-            className="h-2.5 w-2.5 shrink-0 rounded-full"
-            style={{ backgroundColor: project.color }}
-          />
           <Link href={`/projects/${project.slug}`} className="font-medium hover:underline">
             {project.name}
           </Link>
