@@ -22,9 +22,11 @@ export type TaskListItemData = TaskInput & { id: string };
 export function TaskListItem({
   task,
   projects,
+  variant = "row",
 }: {
   task: TaskListItemData;
   projects: { id: string; name: string }[];
+  variant?: "row" | "card";
 }) {
   const [editOpen, setEditOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -42,6 +44,54 @@ export function TaskListItem({
     });
   }
 
+  const dueDateChip = dueDateInfo.label ? (
+    <span
+      className={cn(
+        "text-xs",
+        dueDateInfo.variant === "overdue" && "text-destructive",
+        dueDateInfo.variant === "today" && "font-medium text-foreground",
+        dueDateInfo.variant === "upcoming" && "text-muted-foreground"
+      )}
+    >
+      {dueDateInfo.label}
+    </span>
+  ) : null;
+
+  const editSheet = (
+    <TaskFormSheet
+      open={editOpen}
+      onOpenChange={setEditOpen}
+      projects={projects}
+      defaultProjectId={task.projectId}
+      task={task}
+    />
+  );
+
+  if (variant === "card") {
+    return (
+      <div className="flex flex-col gap-2 rounded-lg border bg-background p-3">
+        <div className="flex items-start gap-2">
+          <Checkbox checked={isCompleted} disabled={isPending} onCheckedChange={handleToggle} />
+          <button
+            type="button"
+            onClick={() => setEditOpen(true)}
+            className={cn(
+              "flex-1 text-left text-sm",
+              isCompleted && "text-muted-foreground line-through"
+            )}
+          >
+            {task.title}
+          </button>
+        </div>
+        <div className="flex items-center gap-2 pl-6">
+          <Badge variant="outline">{PRIORITY_LABELS[task.priority]}</Badge>
+          {dueDateChip}
+        </div>
+        {editSheet}
+      </div>
+    );
+  }
+
   return (
     <div className="flex items-center gap-3 rounded-lg border p-3">
       <Checkbox checked={isCompleted} disabled={isPending} onCheckedChange={handleToggle} />
@@ -56,26 +106,8 @@ export function TaskListItem({
         {task.title}
       </button>
       <Badge variant="outline">{PRIORITY_LABELS[task.priority]}</Badge>
-      {dueDateInfo.label ? (
-        <span
-          className={cn(
-            "text-xs",
-            dueDateInfo.variant === "overdue" && "text-destructive",
-            dueDateInfo.variant === "today" && "font-medium text-foreground",
-            dueDateInfo.variant === "upcoming" && "text-muted-foreground"
-          )}
-        >
-          {dueDateInfo.label}
-        </span>
-      ) : null}
-
-      <TaskFormSheet
-        open={editOpen}
-        onOpenChange={setEditOpen}
-        projects={projects}
-        defaultProjectId={task.projectId}
-        task={task}
-      />
+      {dueDateChip}
+      {editSheet}
     </div>
   );
 }
