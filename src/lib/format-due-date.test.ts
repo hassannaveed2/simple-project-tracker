@@ -18,9 +18,9 @@ describe("formatDueDate", () => {
     expect(formatDueDate(due, now)).toEqual({ label: "Overdue", variant: "overdue" });
   });
 
-  it("labels tomorrow as Tomorrow", () => {
+  it("labels tomorrow as Tomorrow with its own distinct variant", () => {
     const due = new Date("2026-09-22T00:00:00.000Z");
-    expect(formatDueDate(due, now)).toEqual({ label: "Tomorrow", variant: "upcoming" });
+    expect(formatDueDate(due, now)).toEqual({ label: "Tomorrow", variant: "tomorrow" });
   });
 
   it("labels a date further out with a short date", () => {

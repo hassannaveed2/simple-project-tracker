@@ -1,4 +1,4 @@
-export type DueDateVariant = "overdue" | "today" | "upcoming" | "none";
+export type DueDateVariant = "overdue" | "today" | "tomorrow" | "upcoming" | "none";
 
 export type DueDateInfo = {
   label: string | null;
@@ -25,7 +25,7 @@ export function formatDueDate(dueDate: Date | null, now: Date = new Date()): Due
     return { label: "Today", variant: "today" };
   }
   if (diffDays === 1) {
-    return { label: "Tomorrow", variant: "upcoming" };
+    return { label: "Tomorrow", variant: "tomorrow" };
   }
   return {
     label: dueDate.toLocaleDateString("en-US", {

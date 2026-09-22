@@ -50,6 +50,7 @@ export function TaskListItem({
         "text-xs",
         dueDateInfo.variant === "overdue" && "text-destructive",
         dueDateInfo.variant === "today" && "font-medium text-foreground",
+        dueDateInfo.variant === "tomorrow" && "font-medium text-amber-600 dark:text-amber-400",
         dueDateInfo.variant === "upcoming" && "text-muted-foreground"
       )}
     >
