@@ -79,7 +79,7 @@ export function TaskListItem({
           type="button"
           onClick={() => setEditOpen(true)}
           className={cn(
-            "text-left text-sm",
+            "min-w-0 w-full truncate text-left text-sm",
             isCompleted && "text-muted-foreground line-through"
           )}
         >
@@ -101,7 +101,7 @@ export function TaskListItem({
         type="button"
         onClick={() => setEditOpen(true)}
         className={cn(
-          "flex-1 text-left text-sm",
+          "min-w-0 flex-1 truncate text-left text-sm",
           isCompleted && "text-muted-foreground line-through"
         )}
       >
