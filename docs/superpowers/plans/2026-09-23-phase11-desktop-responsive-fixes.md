@@ -18,7 +18,7 @@
 - Modify: `src/components/tasks/kanban-board.tsx`
 - Modify: `src/components/tasks/kanban-card.tsx`
 
-- [ ] **Step 1: Update `kanban-card.tsx` — stop transforming the source node**
+- [x] **Step 1: Update `kanban-card.tsx` — stop transforming the source node**
 
 Replace the full contents of `src/components/tasks/kanban-card.tsx`:
 
@@ -58,7 +58,7 @@ export function KanbanCard({
 now renders the moving visual. The original card just dims to `opacity-50` at its original slot
 while dragging, exactly as before.)
 
-- [ ] **Step 2: Update `kanban-board.tsx` — track the active task and render `DragOverlay`**
+- [x] **Step 2: Update `kanban-board.tsx` — track the active task and render `DragOverlay`**
 
 Replace the full contents of `src/components/tasks/kanban-board.tsx`:
 
@@ -168,12 +168,12 @@ export function KanbanBoard({
 (`onDragCancel` clears `activeTask` too — e.g. pressing Escape mid-drag — so a stale overlay can
 never linger.)
 
-- [ ] **Step 3: Verify**
+- [x] **Step 3: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add src/components/tasks/kanban-board.tsx src/components/tasks/kanban-card.tsx
@@ -187,7 +187,7 @@ git commit -m "Use DragOverlay for Kanban cards instead of transforming the sour
 **Files:**
 - Modify: `src/app/(dashboard)/layout.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 Replace the full contents of `src/app/(dashboard)/layout.tsx`:
 
@@ -227,12 +227,12 @@ be compressed by the flex column now that the column has a fixed height. `Sideba
 changes — as a flex item in a row with a definite height, it stretches to fill that height via
 flexbox's default `align-items: stretch`.)
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add "src/app/(dashboard)/layout.tsx"
@@ -246,7 +246,7 @@ git commit -m "Lock dashboard layout to viewport height so only main content scr
 **Files:**
 - Modify: `src/components/ui/textarea.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 In `src/components/ui/textarea.tsx`, change the className string from:
 ```
@@ -260,12 +260,12 @@ to:
 primitive already used by both `TaskFormSheet` (Description, Notes) and `ProjectFormSheet`
 (Description) — no call-site changes needed, both benefit automatically.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/ui/textarea.tsx
@@ -279,7 +279,7 @@ git commit -m "Cap Textarea growth with max-height and internal scroll"
 **Files:**
 - Modify: `src/components/tasks/task-list-item.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 In `src/components/tasks/task-list-item.tsx`, the "card" variant's title button currently has:
 ```tsx
@@ -314,12 +314,12 @@ className={cn(
 (`min-w-0` is required alongside `truncate` on a flex item — flexbox's default `min-width: auto`
 otherwise uses the text's untruncated intrinsic width as a floor, silently defeating `truncate`.)
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/tasks/task-list-item.tsx
@@ -333,7 +333,7 @@ git commit -m "Truncate long task titles instead of overflowing their row/card"
 **Files:**
 - Modify: `src/components/ui/sheet.tsx`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 In `src/components/ui/sheet.tsx`'s `SheetContent`, the base (non-side-specific) className string
 currently is:
@@ -348,12 +348,12 @@ Change to:
 sheet in the app — not just the task form — now scrolls internally if its content is taller than
 the viewport, instead of clipping silently.
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 Run: `npx tsc --noEmit`
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/components/ui/sheet.tsx
@@ -362,11 +362,46 @@ git commit -m "Make sheet content scrollable when it exceeds the viewport"
 
 ---
 
+### Addendum: two more instances of the same bug class, found during Task 6 verification
+
+Manual verification (Task 6, Step 2, item 5) surfaced two more overflow bugs of the exact same
+root cause already fixed in Task 4 (a flex/grid item's default `min-width: auto` letting an
+unbreakable long string's intrinsic width bubble up through ancestors instead of being clipped):
+
+1. **Kanban column itself, not just the title button.** `KanbanColumn`'s root div
+   (`src/components/tasks/kanban-column.tsx`) is `flex-1` inside the board's `flex-row` container
+   but had no `min-w-0`. A 200-char unbroken title made the column's own min-content width balloon
+   to ~1300px, so the column rendered far wider than its siblings (measured 1358px vs. a 976px-wide
+   row) and the title button's own `truncate` never got a chance to engage, since its container
+   never shrank. Fix: added `min-w-0` alongside the existing `flex-1` on that div.
+
+2. **Delete-confirmation `AlertDialogTitle`.** `DeleteTaskDialog` interpolates the task title into
+   `AlertDialogTitle`. With no wrap override, the same unbreakable string blew out the dialog's
+   internal grid track (title measured 1822px wide inside a 512px-capped dialog box), which dragged
+   the `AlertDialogFooter` far outside the viewport — the Cancel/Delete buttons became genuinely
+   unclickable. Fix: added Tailwind's `wrap-anywhere` (`overflow-wrap: anywhere`) to
+   `AlertDialogTitle` in the shared `src/components/ui/alert-dialog.tsx`, so long titles wrap
+   instead of overflowing. This is a shared primitive, so it fixes every `AlertDialog` usage in the
+   app, not just this one call site.
+
+Both verified via Playwright: column width settles to an even ~315px (three-column board at
+1280px viewport) with the button actually truncating (`scrollWidth > clientWidth`); dialog title
+wraps to 462px width and the footer buttons land back inside the viewport and are clickable.
+
+```bash
+git add src/components/tasks/kanban-column.tsx
+git commit -m "Prevent unbreakable task titles from blowing out Kanban column width"
+git add src/components/ui/alert-dialog.tsx
+git commit -m "Wrap long titles in AlertDialogTitle instead of overflowing the dialog"
+```
+
+---
+
 ### Task 6: Final verification
 
 **Files:** none (verification only)
 
-- [ ] **Step 1: Automated checks**
+- [x] **Step 1: Automated checks**
 
 Run, in order:
 ```bash
@@ -377,7 +412,7 @@ npm run build
 ```
 Expected: all pass with no errors.
 
-- [ ] **Step 2: Manual browser walkthrough**
+- [x] **Step 2: Manual browser walkthrough**
 
 Start the dev server (`npm run dev`) and, logged in as `demo@example.com` / `password123`:
 
@@ -402,13 +437,13 @@ Start the dev server (`npm run dev`) and, logged in as `demo@example.com` / `pas
 6. Check the browser console for errors throughout — expect none (aside from the
    already-documented, pre-existing intermittent Radix `useId` hydration warning).
 
-- [ ] **Step 3: Mark this plan's checkboxes complete**
+- [x] **Step 3: Mark this plan's checkboxes complete**
 
 ```bash
 sed -i 's/^- \[ \]/- [x]/' docs/superpowers/plans/2026-09-23-phase11-desktop-responsive-fixes.md
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add docs/superpowers/plans/2026-09-23-phase11-desktop-responsive-fixes.md
