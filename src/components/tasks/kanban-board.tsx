@@ -4,16 +4,18 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import {
   DndContext,
+  DragOverlay,
   PointerSensor,
   KeyboardSensor,
   useSensor,
   useSensors,
+  type DragStartEvent,
   type DragEndEvent,
 } from "@dnd-kit/core";
 import { updateTaskStatus } from "@/actions/tasks";
 import { TASK_STATUSES } from "@/lib/validations/task";
 import { KanbanColumn } from "./kanban-column";
-import type { TaskListItemData } from "./task-list-item";
+import { TaskListItem, type TaskListItemData } from "./task-list-item";
 
 export function KanbanBoard({
   initialTasks,
@@ -25,6 +27,7 @@ export function KanbanBoard({
   projectColor: string;
 }) {
   const [tasks, setTasks] = useState(initialTasks);
+  const [activeTask, setActiveTask] = useState<TaskListItemData | null>(null);
 
   // Re-sync whenever the server-provided list changes — e.g. any create/edit/delete/checkbox
   // action elsewhere on the page triggers revalidatePath and this page re-renders with fresh
@@ -38,7 +41,13 @@ export function KanbanBoard({
     useSensor(KeyboardSensor)
   );
 
+  function handleDragStart(event: DragStartEvent) {
+    const task = tasks.find((t) => t.id === event.active.id);
+    setActiveTask(task ?? null);
+  }
+
   function handleDragEnd(event: DragEndEvent) {
+    setActiveTask(null);
     const taskId = event.active.id as string;
     const newStatus = event.over?.id as (typeof TASK_STATUSES)[number] | undefined;
     if (!newStatus) return;
@@ -58,7 +67,13 @@ export function KanbanBoard({
   }
 
   return (
-    <DndContext id="kanban-board" sensors={sensors} onDragEnd={handleDragEnd}>
+    <DndContext
+      id="kanban-board"
+      sensors={sensors}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onDragCancel={() => setActiveTask(null)}
+    >
       <div className="flex flex-col gap-4 md:flex-row">
         {TASK_STATUSES.map((status) => (
           <KanbanColumn
@@ -70,6 +85,16 @@ export function KanbanBoard({
           />
         ))}
       </div>
+      <DragOverlay>
+        {activeTask ? (
+          <TaskListItem
+            task={activeTask}
+            projects={projects}
+            variant="card"
+            projectColor={projectColor}
+          />
+        ) : null}
+      </DragOverlay>
     </DndContext>
   );
 }
