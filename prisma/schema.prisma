@@ -73,6 +73,7 @@ model Task {
   priority    TaskPriority @default(MEDIUM)
   dueDate     DateTime?
   completedAt DateTime?
+  order       Int          @default(0)
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
@@ -85,6 +86,7 @@ model Task {
   @@index([status])
   @@index([priority])
   @@index([dueDate])
+  @@index([projectId, status, order])
 }
 
 model Activity {
