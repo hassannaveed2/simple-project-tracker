@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,6 +25,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -30,6 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import {
   taskSchema,
   TASK_PRIORITIES,
@@ -38,6 +43,18 @@ import {
 } from "@/lib/validations/task";
 import { createTask, updateTask } from "@/actions/tasks";
 import { DeleteTaskDialog } from "./delete-task-dialog";
+
+// `dueDate` is stored as a plain "YYYY-MM-DD" string (see taskSchema) with no timezone info of
+// its own. `Calendar` (react-day-picker) compares selected/displayed dates using the JS Date
+// object's LOCAL year/month/day — so these must round-trip through LOCAL midnight, not through
+// `new Date("YYYY-MM-DD")` (which parses as UTC midnight and can display as the previous day for
+// timezones west of UTC) or `.toISOString()` (which can shift the day the other direction). Same
+// underlying pitfall `dashboard-calendar.tsx`'s `toLocalMidnight` helper exists to avoid.
+function parseDueDateString(value: string | undefined): Date | undefined {
+  if (!value) return undefined;
+  const [year, month, day] = value.split("-").map(Number);
+  return new Date(year, month - 1, day);
+}
 
 const PRIORITY_LABELS: Record<(typeof TASK_PRIORITIES)[number], string> = {
   LOW: "Low",
@@ -182,11 +199,51 @@ export function TaskFormSheet({
                 control={form.control}
                 name="dueDate"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="flex flex-col">
                     <FormLabel>Due Date</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className={cn(
+                              "w-full min-w-0 justify-start text-left font-normal",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            <CalendarIcon className="size-4 shrink-0" />
+                            <span className="truncate">
+                              {field.value
+                                ? format(parseDueDateString(field.value)!, "MMM d, yyyy")
+                                : "Pick a date"}
+                            </span>
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={parseDueDateString(field.value)}
+                          onSelect={(date) =>
+                            field.onChange(date ? format(date, "yyyy-MM-dd") : "")
+                          }
+                        />
+                        {field.value ? (
+                          <div className="border-t p-2">
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              className="w-full"
+                              onClick={() => field.onChange("")}
+                            >
+                              Clear date
+                            </Button>
+                          </div>
+                        ) : null}
+                      </PopoverContent>
+                    </Popover>
                     <FormMessage />
                   </FormItem>
                 )}
