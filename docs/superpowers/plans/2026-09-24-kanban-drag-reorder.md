@@ -40,13 +40,13 @@ data-loss or crash consequence.
 **Files:**
 - Modify: `package.json`, `package-lock.json` (via `npm install`)
 
-- [ ] **Step 1: Install**
+- [x] **Step 1: Install**
 
 ```bash
 npm install @dnd-kit/sortable@^10.0.0 @dnd-kit/utilities@^3.2.2
 ```
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 ```bash
 npm ls @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities
@@ -55,7 +55,7 @@ npm ls @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities
 Expected: all three listed with no `UNMET PEER DEPENDENCY` warnings (`@dnd-kit/sortable`'s peer
 `@dnd-kit/core: ^6.3.0` is satisfied by the installed `^6.3.1`).
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add package.json package-lock.json
@@ -70,7 +70,7 @@ git commit -m "Add @dnd-kit/sortable and @dnd-kit/utilities for Kanban drag-to-r
 - Modify: `prisma/schema.prisma`
 - Create: `prisma/migrations/<timestamp>_add_task_order/migration.sql`
 
-- [ ] **Step 1: Add the field and index to the schema**
+- [x] **Step 1: Add the field and index to the schema**
 
 In `prisma/schema.prisma`, in `model Task`, add `order` after `completedAt` and a new composite
 index alongside the existing ones:
@@ -104,7 +104,7 @@ model Task {
 }
 ```
 
-- [ ] **Step 2: Generate the migration SQL without applying it**
+- [x] **Step 2: Generate the migration SQL without applying it**
 
 Per CLAUDE.md's non-interactive migration workflow:
 
@@ -116,7 +116,7 @@ This creates `prisma/migrations/<timestamp>_add_task_order/migration.sql` contai
 auto-generated `ALTER TABLE "Task" ADD COLUMN "order" INTEGER NOT NULL DEFAULT 0;` plus a
 `CREATE INDEX` for the new composite index, without applying it yet.
 
-- [ ] **Step 3: Hand-edit the migration to backfill existing rows**
+- [x] **Step 3: Hand-edit the migration to backfill existing rows**
 
 Postgres applies the column's constant default (`0`) to every existing row when the column is
 added — every task in every column would tie at `order = 0`. Open the generated
@@ -145,7 +145,7 @@ WHERE "Task".id = ranked.id;
 so `ORDER BY "priority" DESC` sorts `URGENT, HIGH, MEDIUM, LOW` — the same semantics as the
 existing Prisma `orderBy: { priority: "desc" }`.)
 
-- [ ] **Step 4: Apply the migration**
+- [x] **Step 4: Apply the migration**
 
 ```bash
 npx prisma migrate deploy
@@ -155,7 +155,7 @@ Expected: reports the new migration applied successfully. `deploy` never prompts
 regardless of whether the added column would have triggered `migrate dev`'s interactive
 confirmation.
 
-- [ ] **Step 5: Verify**
+- [x] **Step 5: Verify**
 
 ```bash
 npx prisma studio
@@ -164,7 +164,7 @@ npx prisma studio
 Spot-check a project with multiple tasks in the same column — confirm `order` values are `0, 1,
 2, ...` per column rather than all `0`. Close Prisma Studio when done.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add prisma/schema.prisma prisma/migrations
@@ -192,7 +192,7 @@ passing a `TaskListItemData` (with the new `order` field) into it is a normal st
 assignment with an extra property, and the extra property is invisible inside that component. No
 changes needed there.
 
-- [ ] **Step 1: Add `order` to `TaskListItemData`**
+- [x] **Step 1: Add `order` to `TaskListItemData`**
 
 In `src/components/tasks/task-list-item.tsx` line 15, change:
 
@@ -206,7 +206,7 @@ to:
 export type TaskListItemData = TaskInput & { id: string; order: number };
 ```
 
-- [ ] **Step 2: Verify it fails to compile (confirms every construction site needs updating)**
+- [x] **Step 2: Verify it fails to compile (confirms every construction site needs updating)**
 
 ```bash
 npx tsc --noEmit
@@ -215,7 +215,7 @@ npx tsc --noEmit
 Expected: multiple errors like `Property 'order' is missing in type '...' but required in type
 'TaskListItemData'` across the files listed below.
 
-- [ ] **Step 3: Update the Kanban board's data fetch and ordering**
+- [x] **Step 3: Update the Kanban board's data fetch and ordering**
 
 In `src/app/(dashboard)/projects/[slug]/page.tsx`:
 
@@ -244,7 +244,7 @@ task.status,`:
   }));
 ```
 
-- [ ] **Step 4: Update `/completed`, `/upcoming`, `/today` mappings**
+- [x] **Step 4: Update `/completed`, `/upcoming`, `/today` mappings**
 
 These pages don't use `order` for sorting (per the design doc's scope — Kanban-only), but the
 field is required on `TaskListItemData`, and every task row already has a real `order` value in
@@ -263,7 +263,7 @@ None of these three files' Prisma queries need an explicit `select`/`orderBy` ch
 plain `findMany` without a narrowing `select`, so `order` is already present on the returned
 `task` object.
 
-- [ ] **Step 5: Update the two test mock builders**
+- [x] **Step 5: Update the two test mock builders**
 
 In `src/lib/group-tasks-by-project.test.ts`, add `order: 0,` to `makeTask`'s default object
 (lines 11-19), alongside the existing `dueDate: ""`.
@@ -271,7 +271,7 @@ In `src/lib/group-tasks-by-project.test.ts`, add `order: 0,` to `makeTask`'s def
 In `src/lib/group-tasks-by-due-date.test.ts`, add `order: 0,` to `makeTask`'s default object
 (lines 6-15), alongside the existing `dueDate: ""`.
 
-- [ ] **Step 6: Verify**
+- [x] **Step 6: Verify**
 
 ```bash
 npx tsc --noEmit
@@ -280,7 +280,7 @@ npm test -- --run
 
 Expected: no errors, all existing tests pass.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/components/tasks/task-list-item.tsx \
@@ -300,7 +300,7 @@ git commit -m "Thread Task.order through TaskListItemData and every task-fetchin
 **Files:**
 - Modify: `src/actions/tasks.ts`
 
-- [ ] **Step 1: Implement**
+- [x] **Step 1: Implement**
 
 In `src/actions/tasks.ts`, add this new exported function after `updateTaskStatus` (after line
 170, before `deleteTask`):
@@ -398,7 +398,7 @@ other action in this file, and replicates `updateTaskStatus`'s `completedAt`/act
 behavior exactly (only logs `TASK_COMPLETED` when a task's status changes *into* `COMPLETED`, and
 only touches `completedAt` when status is actually changing).
 
-- [ ] **Step 2: Verify**
+- [x] **Step 2: Verify**
 
 ```bash
 npx tsc --noEmit
@@ -406,7 +406,7 @@ npx tsc --noEmit
 
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add src/actions/tasks.ts
@@ -422,7 +422,7 @@ git commit -m "Add reorderTasks Server Action for persisted Kanban ordering"
 - Modify: `src/components/tasks/kanban-column.tsx`
 - Modify: `src/components/tasks/kanban-board.tsx`
 
-- [ ] **Step 1: `kanban-card.tsx` — `useSortable` instead of `useDraggable`**
+- [x] **Step 1: `kanban-card.tsx` — `useSortable` instead of `useDraggable`**
 
 Replace the full contents of `src/components/tasks/kanban-card.tsx`:
 
@@ -470,7 +470,7 @@ produce the "siblings slide to make room" animation as `SortableContext`'s item 
 `DragOverlay`, added in Phase 11, still renders the floating drag visual, so the source card just
 dims to `opacity-50` in place, same as before.)
 
-- [ ] **Step 2: `kanban-column.tsx` — wrap cards in `SortableContext`**
+- [x] **Step 2: `kanban-column.tsx` — wrap cards in `SortableContext`**
 
 In `src/components/tasks/kanban-column.tsx`, add the import and wrap the cards' container:
 
@@ -532,7 +532,7 @@ for dropping into the empty space below the last card. `SortableContext`'s `item
 this column's current task IDs in order, so `verticalListSortingStrategy` knows how to animate
 them.)
 
-- [ ] **Step 3: `kanban-board.tsx` — live reposition on hover, persist on drop**
+- [x] **Step 3: `kanban-board.tsx` — live reposition on hover, persist on drop**
 
 Replace the full contents of `src/components/tasks/kanban-board.tsx`:
 
@@ -694,7 +694,7 @@ export function KanbanBoard({
 }
 ```
 
-- [ ] **Step 4: Verify**
+- [x] **Step 4: Verify**
 
 ```bash
 npx tsc --noEmit
@@ -704,7 +704,7 @@ npm test -- --run
 
 Expected: no errors, all existing tests pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/components/tasks/kanban-card.tsx src/components/tasks/kanban-column.tsx \
@@ -718,7 +718,7 @@ git commit -m "Switch Kanban board to @dnd-kit/sortable for persisted drag-to-re
 
 **Files:** none (verification only)
 
-- [ ] **Step 1: Automated checks**
+- [x] **Step 1: Automated checks**
 
 ```bash
 npx tsc --noEmit
@@ -729,7 +729,7 @@ npm run build
 
 Expected: all pass with no errors.
 
-- [ ] **Step 2: Manual browser walkthrough**
+- [x] **Step 2: Manual browser walkthrough**
 
 Using the dev server, logged in as `demo@example.com` / `password123`, on a project with several
 tasks in each column:
@@ -751,13 +751,13 @@ tasks in each column:
    completed-date ordering, unaffected by any Kanban drags.
 7. Check the browser console for errors throughout — expect none.
 
-- [ ] **Step 3: Mark this plan's checkboxes complete**
+- [x] **Step 3: Mark this plan's checkboxes complete**
 
 ```bash
 sed -i 's/^- \[ \]/- [x]/' docs/superpowers/plans/2026-09-24-kanban-drag-reorder.md
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add docs/superpowers/plans/2026-09-24-kanban-drag-reorder.md
