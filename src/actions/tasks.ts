@@ -169,6 +169,92 @@ export async function updateTaskStatus(
   return { success: true };
 }
 
+export type ReorderColumnInput = {
+  status: TaskStatus;
+  taskIds: string[];
+};
+
+// Note: this reindexes exactly the task IDs it's given, per column, to 0..N-1. If the Kanban
+// board's filters are active when a drag happens, the given list is only the filtered-visible
+// subset of a column — filtered-out siblings keep whatever order they already had, which can
+// leave duplicate order values in that column until the user drags again with filters cleared.
+// Harmless (ordering always falls back to a stable id tiebreak — see the orderBy this replaces),
+// just a known, accepted limitation at this app's personal scale.
+export async function reorderTasks(columns: ReorderColumnInput[]): Promise<TaskActionResult> {
+  const userId = await requireUserId();
+
+  const allTaskIds = columns.flatMap((column) => column.taskIds);
+  if (allTaskIds.length === 0) {
+    return { success: false, error: "No tasks to reorder" };
+  }
+
+  const existingTasks = await prisma.task.findMany({
+    where: { id: { in: allTaskIds }, userId },
+    select: {
+      id: true,
+      status: true,
+      title: true,
+      projectId: true,
+      project: { select: { name: true, slug: true } },
+    },
+  });
+  if (existingTasks.length !== allTaskIds.length) {
+    return { success: false, error: "Task not found" };
+  }
+  const taskById = new Map(existingTasks.map((task) => [task.id, task]));
+  const projectSlug = existingTasks[0]!.project.slug;
+
+  const completions: { taskId: string; projectId: string; title: string; projectName: string }[] =
+    [];
+  for (const column of columns) {
+    for (const taskId of column.taskIds) {
+      const task = taskById.get(taskId)!;
+      if (column.status === "COMPLETED" && task.status !== "COMPLETED") {
+        completions.push({
+          taskId,
+          projectId: task.projectId,
+          title: task.title,
+          projectName: task.project.name,
+        });
+      }
+    }
+  }
+
+  await prisma.$transaction(
+    columns.flatMap((column) =>
+      column.taskIds.map((taskId, index) => {
+        const task = taskById.get(taskId)!;
+        return prisma.task.updateMany({
+          where: { id: taskId, userId },
+          data: {
+            order: index,
+            ...(task.status !== column.status
+              ? {
+                  status: column.status,
+                  completedAt: column.status === "COMPLETED" ? new Date() : null,
+                }
+              : {}),
+          },
+        });
+      })
+    )
+  );
+
+  for (const completion of completions) {
+    await logActivity({
+      userId,
+      projectId: completion.projectId,
+      taskId: completion.taskId,
+      type: "TASK_COMPLETED",
+      metadata: { title: completion.title, projectName: completion.projectName },
+    });
+  }
+
+  revalidatePath(`/projects/${projectSlug}`);
+  revalidatePath("/projects");
+  return { success: true };
+}
+
 export async function deleteTask(taskId: string): Promise<TaskActionResult> {
   const userId = await requireUserId();
 
