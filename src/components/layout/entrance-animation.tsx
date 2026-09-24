@@ -5,8 +5,8 @@ import { ListChecks } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const SESSION_STORAGE_KEY = "show-entrance-animation";
-const HOLD_MS = 1200;
-const EXIT_MS = 300;
+const HOLD_MS = 2000;
+const EXIT_MS = 400;
 
 export function markEntranceAnimationForNextLoad() {
   sessionStorage.setItem(SESSION_STORAGE_KEY, "1");
@@ -40,7 +40,7 @@ export function EntranceAnimation() {
     <div
       className={cn(
         "fixed inset-0 z-[100] flex items-center justify-center bg-background",
-        phase === "exiting" ? "animate-out fade-out duration-300" : "animate-in fade-in duration-300"
+        phase === "exiting" ? "animate-out fade-out duration-400" : "animate-in fade-in duration-300"
       )}
     >
       <div className="flex flex-col items-center gap-3 animate-in zoom-in-95 fade-in duration-700">
