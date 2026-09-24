@@ -15,10 +15,13 @@ export default async function DashboardLayout({
 
   // Read fresh from the database rather than trusting the JWT session claims, since updateProfile
   // can change `name` without the session token refreshing (same reasoning as the Settings page).
-  const user = await prisma.user.findUniqueOrThrow({
+  // The JWT itself stays validly-signed even if its user was later deleted (e.g. a database
+  // reset) — treat a missing row as an expired session rather than crashing.
+  const user = await prisma.user.findUnique({
     where: { id: session.user.id },
     select: { name: true, email: true, image: true },
   });
+  if (!user) redirect("/auth/login");
 
   return (
     <div className="flex h-screen overflow-hidden">
