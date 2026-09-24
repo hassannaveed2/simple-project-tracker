@@ -53,6 +53,7 @@ export default async function TodayPage() {
       projectId: task.projectId,
       priority: task.priority,
       status: task.status,
+      order: task.order,
       dueDate: task.dueDate ? task.dueDate.toISOString().slice(0, 10) : "",
       projectName: task.project.name,
       projectColor: task.project.color,

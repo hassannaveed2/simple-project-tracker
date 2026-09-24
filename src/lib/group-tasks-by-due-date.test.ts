@@ -10,6 +10,7 @@ function makeTask(overrides: Partial<TaskListItemData> & { id: string }): TaskLi
     projectId: "p1",
     priority: "MEDIUM",
     status: "TODO",
+    order: 0,
     dueDate: "",
     ...overrides,
   };

@@ -42,6 +42,7 @@ export default async function UpcomingPage() {
     projectId: task.projectId,
     priority: task.priority,
     status: task.status,
+    order: task.order,
     dueDate: task.dueDate ? task.dueDate.toISOString().slice(0, 10) : "",
   }));
 

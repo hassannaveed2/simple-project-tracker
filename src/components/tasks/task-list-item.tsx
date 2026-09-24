@@ -12,7 +12,7 @@ import { PROJECT_COLOR_CARD_CLASSES } from "@/lib/project-color-styles";
 import { TaskFormSheet } from "./task-form-sheet";
 import type { TaskInput } from "@/lib/validations/task";
 
-export type TaskListItemData = TaskInput & { id: string };
+export type TaskListItemData = TaskInput & { id: string; order: number };
 
 export function TaskListItem({
   task,

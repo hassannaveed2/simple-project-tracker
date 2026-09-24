@@ -51,7 +51,7 @@ export default async function ProjectDetailPage({
           ...(due === "upcoming" ? { dueDate: { gte: todayEnd } } : {}),
           ...(due === "none" ? { dueDate: null } : {}),
         },
-        orderBy: [{ status: "asc" }, { priority: "desc" }, { dueDate: "asc" }],
+        orderBy: [{ status: "asc" }, { order: "asc" }],
       },
     },
   });
@@ -91,6 +91,7 @@ export default async function ProjectDetailPage({
     projectId: task.projectId,
     priority: task.priority,
     status: task.status,
+    order: task.order,
     dueDate: task.dueDate ? task.dueDate.toISOString().slice(0, 10) : "",
   }));
 

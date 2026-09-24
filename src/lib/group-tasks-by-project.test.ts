@@ -14,6 +14,7 @@ function makeTask(
     notes: "",
     priority: "MEDIUM",
     status: "TODO",
+    order: 0,
     dueDate: "",
     ...overrides,
   };
