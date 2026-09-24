@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Calendar } from "@/components/ui/calendar";
+import type { DayButton } from "react-day-picker";
+import { Calendar, CalendarDayButton } from "@/components/ui/calendar";
 import { UpcomingTaskRow, type UpcomingTaskData } from "./upcoming-task-row";
 
 // Task due dates are stored as UTC-midnight instants (see lib/format-due-date.ts). The calendar
@@ -10,6 +11,17 @@ import { UpcomingTaskRow, type UpcomingTaskData } from "./upcoming-task-row";
 // on the calendar for viewers west of UTC.
 function toLocalMidnight(date: Date): Date {
   return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
+}
+
+function TaskDayButton(props: React.ComponentProps<typeof DayButton>) {
+  return (
+    <CalendarDayButton {...props}>
+      {props.day.date.getDate()}
+      {props.modifiers.hasTask ? (
+        <span className="absolute bottom-1.5 left-1/2 size-1 -translate-x-1/2 rounded-full bg-primary" />
+      ) : null}
+    </CalendarDayButton>
+  );
 }
 
 export function DashboardCalendar({ tasks }: { tasks: UpcomingTaskData[] }) {
@@ -34,15 +46,26 @@ export function DashboardCalendar({ tasks }: { tasks: UpcomingTaskData[] }) {
         selected={selectedDate}
         onSelect={setSelectedDate}
         modifiers={{ hasTask: taskDates }}
-        modifiersClassNames={{ hasTask: "font-bold underline" }}
-        className="rounded-lg border"
+        components={{ DayButton: TaskDayButton }}
+        className="rounded-lg border shadow-sm [--cell-size:--spacing(9)]"
       />
       {selectedDate ? (
-        <div className="space-y-2">
+        <div className="space-y-2 rounded-lg border p-3">
+          <p className="text-sm font-medium">
+            {selectedDate.toLocaleDateString("en-US", {
+              weekday: "long",
+              month: "long",
+              day: "numeric",
+            })}
+          </p>
           {tasksOnSelectedDate.length === 0 ? (
             <p className="text-sm text-muted-foreground">No tasks due this day.</p>
           ) : (
-            tasksOnSelectedDate.map((task) => <UpcomingTaskRow key={task.id} task={task} />)
+            <div className="space-y-2">
+              {tasksOnSelectedDate.map((task) => (
+                <UpcomingTaskRow key={task.id} task={task} />
+              ))}
+            </div>
           )}
         </div>
       ) : null}
