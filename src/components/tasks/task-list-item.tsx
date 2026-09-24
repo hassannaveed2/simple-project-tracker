@@ -69,7 +69,7 @@ export function TaskListItem({
     return (
       <div
         className={cn(
-          "flex flex-col gap-2 rounded-lg border p-3",
+          "flex flex-col gap-2 rounded-lg border p-3 transition-shadow hover:shadow-md",
           projectColor
             ? PROJECT_COLOR_CARD_CLASSES[projectColor as keyof typeof PROJECT_COLOR_CARD_CLASSES]
             : "bg-background"
@@ -95,7 +95,7 @@ export function TaskListItem({
   }
 
   return (
-    <div className="flex items-center gap-3 rounded-lg border p-3">
+    <div className="flex items-center gap-3 rounded-lg border p-3 transition-shadow hover:shadow-md">
       <Checkbox checked={isCompleted} disabled={isPending} onCheckedChange={handleToggle} />
       <button
         type="button"

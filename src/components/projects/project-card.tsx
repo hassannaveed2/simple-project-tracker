@@ -51,7 +51,7 @@ export function ProjectCard({ project }: { project: ProjectCardData }) {
   return (
     <div
       className={cn(
-        "flex flex-col gap-3 rounded-lg border p-4",
+        "flex flex-col gap-3 rounded-lg border p-4 transition-shadow hover:shadow-md",
         PROJECT_COLOR_CARD_CLASSES[project.color]
       )}
     >

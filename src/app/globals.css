@@ -127,4 +127,16 @@
   html {
     @apply font-sans;
   }
+  /* Tailwind v4's Preflight no longer sets cursor: pointer on buttons (matching native browser
+     behavior). Restored here for every interactive role used in this app, including dnd-kit's
+     draggable Kanban cards, which get role="button" from its accessibility attributes. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  [role="menuitem"]:not(:disabled),
+  [role="menuitemcheckbox"]:not(:disabled),
+  [role="option"]:not(:disabled),
+  [role="tab"]:not(:disabled),
+  select:not(:disabled) {
+    cursor: pointer;
+  }
 }
