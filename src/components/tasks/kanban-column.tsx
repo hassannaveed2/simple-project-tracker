@@ -1,6 +1,7 @@
 "use client";
 
 import { useDroppable } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { cn } from "@/lib/utils";
 import { KanbanCard } from "./kanban-card";
 import type { TaskListItemData } from "./task-list-item";
@@ -37,11 +38,13 @@ export function KanbanColumn({
         <h3 className="text-sm font-medium">{COLUMN_LABELS[status]}</h3>
         <span className="text-xs text-muted-foreground">{tasks.length}</span>
       </div>
-      <div className="flex flex-col gap-2">
-        {tasks.map((task) => (
-          <KanbanCard key={task.id} task={task} projects={projects} projectColor={projectColor} />
-        ))}
-      </div>
+      <SortableContext items={tasks.map((task) => task.id)} strategy={verticalListSortingStrategy}>
+        <div className="flex flex-col gap-2">
+          {tasks.map((task) => (
+            <KanbanCard key={task.id} task={task} projects={projects} projectColor={projectColor} />
+          ))}
+        </div>
+      </SortableContext>
     </div>
   );
 }
