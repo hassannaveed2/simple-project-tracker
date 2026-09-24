@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { Sidebar } from "@/components/layout/sidebar";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { ProfileMenu } from "@/components/layout/profile-menu";
+import { EntranceAnimation } from "@/components/layout/entrance-animation";
 
 export default async function DashboardLayout({
   children,
@@ -25,6 +26,7 @@ export default async function DashboardLayout({
 
   return (
     <div className="flex h-screen overflow-hidden">
+      <EntranceAnimation />
       <Sidebar />
       <div className="flex h-screen flex-1 flex-col overflow-hidden">
         <header className="flex h-14 shrink-0 items-center gap-3 border-b px-4">

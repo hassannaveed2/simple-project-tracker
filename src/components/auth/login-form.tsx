@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { loginSchema, type LoginInput } from "@/lib/validations/auth";
+import { markEntranceAnimationForNextLoad } from "@/components/layout/entrance-animation";
 
 export function LoginForm() {
   const router = useRouter();
@@ -29,6 +30,7 @@ export function LoginForm() {
     if (result?.error) {
       toast.error("Invalid email or password");
     } else {
+      markEntranceAnimationForNextLoad();
       router.push("/");
       router.refresh();
     }
