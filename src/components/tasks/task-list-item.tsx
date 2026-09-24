@@ -29,7 +29,7 @@ export function TaskListItem({
   const [isPending, startTransition] = useTransition();
   const isCompleted = task.status === "COMPLETED";
   const dueDateObj = task.dueDate ? new Date(task.dueDate) : null;
-  const dueDateInfo = formatDueDate(dueDateObj);
+  const dueDateInfo = formatDueDate(dueDateObj, undefined, isCompleted);
 
   function handleToggle() {
     const nextStatus = isCompleted ? "TODO" : "COMPLETED";

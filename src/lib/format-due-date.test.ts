@@ -27,4 +27,14 @@ describe("formatDueDate", () => {
     const due = new Date("2026-09-26T00:00:00.000Z");
     expect(formatDueDate(due, now)).toEqual({ label: "Sep 26", variant: "upcoming" });
   });
+
+  it("shows the plain date instead of Overdue for a completed task", () => {
+    const due = new Date("2026-09-20T00:00:00.000Z");
+    expect(formatDueDate(due, now, true)).toEqual({ label: "Sep 20", variant: "upcoming" });
+  });
+
+  it("shows the plain date instead of Today/Tomorrow for a completed task", () => {
+    const dueToday = new Date("2026-09-21T00:00:00.000Z");
+    expect(formatDueDate(dueToday, now, true)).toEqual({ label: "Sep 21", variant: "upcoming" });
+  });
 });
